@@ -35,7 +35,6 @@ public class ArrayStorage {
         return null;
     }
 
-
     void delete(String uuid) {
         Resume[] newStorage = new Resume[size];
         boolean check = false;
@@ -52,7 +51,6 @@ public class ArrayStorage {
             }
         }
         storage = newStorage;
-
     }
 
     /**
