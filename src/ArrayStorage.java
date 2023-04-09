@@ -5,16 +5,12 @@ import java.util.Arrays;
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
-    int size = 0;
-    Resume[] resumes = new Resume[size];
+    int size;
 
     void clear() {
         for (int i = 0; i < size; i++) {
-            if (size == 0) {
-                return;
-            } else {
+            if (storage[i] != null) {
                 storage[i] = null;
-                resumes = Arrays.copyOf(storage, size);
             }
         }
     }
@@ -57,23 +53,10 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        Resume resume = new Resume();
-
-        for (int i = 0; i < size; i++) {
-            if (storage[i] != null) {
-                System.out.print(storage[i] + " ");
-            } else if (resume.uuid == null) {
-                return resumes;
-            }
-        }
-        return new Resume[0];
+        return Arrays.copyOf(storage, size);
     }
 
     int size() {
-        if (size == 0) {
-            return 0;
-        } else {
-            return size;
-        }
+        return size;
     }
 }
