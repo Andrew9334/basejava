@@ -9,10 +9,9 @@ public class ArrayStorage {
 
     void clear() {
         for (int i = 0; i < size; i++) {
-            if (storage[i] != null) {
-                storage[i] = null;
-            }
+            storage[i] = null;
         }
+        size = 0;
     }
 
     void save(Resume r) {
@@ -20,9 +19,6 @@ public class ArrayStorage {
     }
 
     Resume get(String uuid) {
-        if (size == 0) {
-            return null;
-        }
         for (int i = 0; i < size; i++) {
             if (storage[i].uuid.equals(uuid)) {
                 return storage[i];
@@ -32,21 +28,20 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
-        Resume[] newStorage = new Resume[size];
-        boolean check = false;
+        int index = 0;
 
         for (int i = 0; i < size; i++) {
             if (storage[i].uuid.equals(uuid)) {
-                check = true;
-            } else {
-                if (!check) {
-                    newStorage[i] = storage[i];
-                } else {
-                    newStorage[i - 1] = storage[i];
-                }
+                index = i;
             }
         }
-        storage = newStorage;
+
+        while (index != size - 1) {
+            storage[index] = storage[index + 1];
+            index++;
+        }
+
+        storage[index] = null;
     }
 
     /**
