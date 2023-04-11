@@ -40,7 +40,6 @@ public class ArrayStorage {
             storage[index] = storage[index + 1];
             index++;
         }
-
         storage[index] = null;
     }
 
