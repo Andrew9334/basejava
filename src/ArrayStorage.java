@@ -100,7 +100,7 @@ public class ArrayStorage {
                 break;
             }
         }
-        if (checkResume == false) {
+        if (checkResume) {
             System.out.println("Error: резюме c uuid " + uuid + " не существует");
         }
         return checkResume;
