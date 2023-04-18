@@ -1,3 +1,6 @@
+package com.urise.webapp.model.storage;
+
+import com.urise.webapp.model.Resume;
 import java.util.Arrays;
 
 /**
@@ -8,7 +11,7 @@ public class ArrayStorage {
     Resume[] storage = new Resume[resumesCount];
     int size;
 
-    void clear() {
+    public void clear() {
         int count = 0;
         for (int i = 0; i < size; i++) {
             if (storage[i] != null) {
@@ -20,10 +23,10 @@ public class ArrayStorage {
         size = 0;
     }
 
-    void save(Resume r) {
+    public void save(Resume r) {
         for (int i = 0; i < size; i++) {
-            if (storage[i].uuid.equals(r.uuid)) {
-                System.out.println("Error: резюме с uuid " + r.uuid + " уже существует");
+            if (storage[i].getUuid().equals(r.getUuid())) {
+                System.out.println("Error: резюме с uuid " + r.getUuid() + " уже существует");
                 return;
             }
         }
@@ -35,10 +38,10 @@ public class ArrayStorage {
         storage[size++] = r;
     }
 
-    void update(Resume resume) {
-        if (checkResumes(resume.uuid)) {
+    public void update(Resume resume) {
+        if (checkResumes(resume.getUuid())) {
             for (int i = 0; i < size; i++) {
-                if (storage[i].uuid.equals(resume.uuid)) {
+                if (storage[i].getUuid().equals(resume.getUuid())) {
                     storage[i] = resume;
                 } else {
                     return;
@@ -47,10 +50,10 @@ public class ArrayStorage {
         }
     }
 
-    Resume get(String uuid) {
+    public Resume get(String uuid) {
         if (checkResumes(uuid)) {
             for (int i = 0; i < size; i++) {
-                if (storage[i].uuid.equals(uuid)) {
+                if (storage[i].getUuid().equals(uuid)) {
                     return storage[i];
                 }
             }
@@ -58,12 +61,12 @@ public class ArrayStorage {
         return null;
     }
 
-    void delete(String uuid) {
+    public void delete(String uuid) {
         if (checkResumes(uuid)) {
             int index = -1;
 
             for (int i = 0; i < size; i++) {
-                if (storage[i].uuid.equals(uuid)) {
+                if (storage[i].getUuid().equals(uuid)) {
                     index = i;
                 }
             }
@@ -84,18 +87,18 @@ public class ArrayStorage {
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-    Resume[] getAll() {
+    public Resume[] getAll() {
         return Arrays.copyOf(storage, size);
     }
 
-    int size() {
+    public int size() {
         return size;
     }
 
     boolean checkResumes(String uuid) {
         boolean checkResume = false;
         for (int i = 0; i < size; i++) {
-            if (storage[i].uuid.equals(uuid)) {
+            if (storage[i].getUuid().equals(uuid)) {
                 checkResume = true;
                 break;
             }
