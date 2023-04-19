@@ -1,87 +1,57 @@
 package com.urise.webapp.model.storage;
 
 import com.urise.webapp.model.Resume;
+
 import java.util.Arrays;
 
 /**
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    int resumesCount = 10000;
-    Resume[] storage = new Resume[resumesCount];
+    protected static final int STORAGE_LIMIT = 10000;
+    Resume[] storage = new Resume[STORAGE_LIMIT];
     int size;
 
     public void clear() {
-        int count = 0;
-        for (int i = 0; i < size; i++) {
-            if (storage[i] != null) {
-                count++;
-            }
-        }
-
-        Arrays.fill(storage, 0, count, null);
+        Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
     public void save(Resume r) {
-        for (int i = 0; i < size; i++) {
-            if (storage[i].getUuid().equals(r.getUuid())) {
-                System.out.println("Error: резюме с uuid " + r.getUuid() + " уже существует");
-                return;
-            }
-        }
+        int index = getIndex(r.getUuid());
 
-        if (size == resumesCount) {
+        if (size >= STORAGE_LIMIT) {
             System.out.println("Error: переполнение списка");
+        } else if (index != -1) {
+            System.out.println("Error: резюме с uuid " + r.getUuid() + " уже существует");
+        } else {
+            storage[size++] = r;
         }
-
-        storage[size++] = r;
     }
 
     public void update(Resume resume) {
-        if (checkResumes(resume.getUuid())) {
-            for (int i = 0; i < size; i++) {
-                if (storage[i].getUuid().equals(resume.getUuid())) {
-                    storage[i] = resume;
-                } else {
-                    return;
-                }
-            }
+        int index = getIndex(resume.getUuid());
+
+        if (index == -1) {
+            System.out.println("Error: резюме " + resume.getUuid() + " не существует");
         }
     }
 
+
     public Resume get(String uuid) {
-        if (checkResumes(uuid)) {
-            for (int i = 0; i < size; i++) {
-                if (storage[i].getUuid().equals(uuid)) {
-                    return storage[i];
-                }
-            }
+        int index = getIndex(uuid);
+
+        if (index == -1) {
+            System.out.println("Error: резюме " + uuid + " не существует");
         }
         return null;
     }
 
     public void delete(String uuid) {
-        if (checkResumes(uuid)) {
-            int index = -1;
+        int index = getIndex(uuid);
 
-            for (int i = 0; i < size; i++) {
-                if (storage[i].getUuid().equals(uuid)) {
-                    index = i;
-                }
-            }
-
-            if (index == -1) {
-                return;
-            }
-
-            while (index < size - 1) {
-                storage[index] = storage[index + 1];
-                index++;
-            }
-            storage[index] = null;
-            size--;
-        }
+        System.arraycopy(storage, index + 1, storage, index, size - 1);
+        size--;
     }
 
     /**
@@ -95,18 +65,13 @@ public class ArrayStorage {
         return size;
     }
 
-    boolean checkResumes(String uuid) {
-        boolean checkResume = false;
+    private int getIndex(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
-                checkResume = true;
-                break;
+                return i;
             }
         }
-        if (!checkResume) {
-            System.out.println("Error: резюме c uuid " + uuid + " не существует");
-        }
-        return checkResume;
+        return -1;
     }
 }
 
