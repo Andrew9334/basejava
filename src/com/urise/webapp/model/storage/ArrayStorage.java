@@ -2,21 +2,12 @@ package com.urise.webapp.model.storage;
 
 import com.urise.webapp.model.Resume;
 
-import java.util.Arrays;
-
 /**
  * Array based storage for Resumes
  */
-public class ArrayStorage {
-    protected static final int STORAGE_LIMIT = 10000;
-    private final Resume[] STORAGE = new Resume[STORAGE_LIMIT];
-    int size;
+public class ArrayStorage extends AbstractArrayStorage{
 
-    public void clear() {
-        Arrays.fill(STORAGE, 0, size, null);
-        size = 0;
-    }
-
+    @Override
     public void save(Resume r) {
         int index = getIndex(r.getUuid());
 
@@ -39,6 +30,7 @@ public class ArrayStorage {
         }
     }
 
+    @Override
     public Resume get(String uuid) {
         int index = getIndex(uuid);
 
@@ -49,6 +41,7 @@ public class ArrayStorage {
         return STORAGE[index];
     }
 
+    @Override
     public void delete(String uuid) {
         int index = getIndex(uuid);
 
@@ -60,18 +53,8 @@ public class ArrayStorage {
         size--;
     }
 
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
-    public Resume[] getAll() {
-        return Arrays.copyOf(STORAGE, size);
-    }
-
-    public int size() {
-        return size;
-    }
-
-    private int getIndex(String uuid) {
+    @Override
+    protected int getIndex(String uuid) {
         for (int i = 0; i < size; i++) {
             if (STORAGE[i].getUuid().equals(uuid)) {
                 return i;
