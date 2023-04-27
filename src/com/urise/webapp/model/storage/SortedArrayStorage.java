@@ -4,43 +4,30 @@ import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
 
-public class SortedArrayStorage extends AbstractArrayStorage{
-    Resume[] STORAGE = new Resume[STORAGE_LIMIT];
-
+public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
-    public void clear() {
-
+    protected void saveResume(Resume r) {
+        int indexSave = -getIndex(r.getUuid()) - 1;
+        System.arraycopy(STORAGE, indexSave, STORAGE, indexSave + 1, size - indexSave  );
+        STORAGE[indexSave] = r;
     }
 
     @Override
-    public void update(Resume r) {
-
-    }
-
-    @Override
-    public void save(Resume r) {
-
-    }
-
-    @Override
-    public void delete(String uuid) {
-
-    }
-
-    @Override
-    public Resume get(String uuid) {
-        return null;
-    }
-
-    @Override
-    public Resume[] getAll() {
-        return new Resume[0];
-    }
-
-    public void sort (Resume resume, int index) {
-        int indexSort = -index - 1;
-        System.arraycopy(STORAGE, indexSort, STORAGE, indexSort + 1, size - indexSort);
+    protected void updateResume(Resume resume) {
+        int indexSort = getIndex(resume.getUuid());
         STORAGE[indexSort] = resume;
+    }
+
+    @Override
+    protected void deleteResume(String uuid) {
+        int indexSort = getIndex(uuid);
+        System.arraycopy(STORAGE, indexSort + 1, STORAGE, indexSort, size - indexSort - 1);
+    }
+
+    @Override
+    protected Resume getResume(String uuid) {
+        int indexSort = getIndex(uuid);
+        return STORAGE[indexSort];
     }
 
     @Override
