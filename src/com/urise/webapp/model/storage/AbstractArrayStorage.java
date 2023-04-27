@@ -43,7 +43,7 @@ public abstract class AbstractArrayStorage implements Storage {
             System.out.println("Error: резюме " + uuid + " не существует");
             return null;
         }
-        return STORAGE[index];
+        return getResume(uuid);
     }
 
     public final void delete(String uuid) {
