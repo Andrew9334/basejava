@@ -6,10 +6,9 @@ import com.urise.webapp.model.Resume;
  * Array based storage for Resumes
  */
 public class ArrayStorage extends AbstractArrayStorage {
-
     @Override
-    protected void saveResume(Resume r) {
-        STORAGE[size++] = r;
+    protected void saveResume(Resume r, int index) {
+        STORAGE[size] = r;
     }
 
     @Override
@@ -19,9 +18,9 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void deleteResume(String uuid) {
-        int index = getIndex(uuid);
-        System.arraycopy(STORAGE, size - 1, STORAGE, index, 1);
+    protected void deleteResume(String uuid, int index) {
+        index = getIndex(uuid);
+        System.arraycopy(STORAGE, size - 1, STORAGE, index, index + 1);
     }
 
     @Override
