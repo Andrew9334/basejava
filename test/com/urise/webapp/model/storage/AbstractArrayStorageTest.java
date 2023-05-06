@@ -1,12 +1,15 @@
 package com.urise.webapp.model.storage;
 
+import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static com.urise.webapp.model.storage.AbstractArrayStorage.STORAGE_LIMIT;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 public abstract class AbstractArrayStorageTest {
     private final Storage storage;
@@ -31,51 +34,47 @@ public abstract class AbstractArrayStorageTest {
         storage.save(RESUME_1);
         storage.save(RESUME_2);
         storage.save(RESUME_3);
-        storage.save(RESUME_4);
     }
 
     @Test
     public void clear() {
         storage.clear();
         assertSize(0);
-        Assert.assertArrayEquals(storage.getAll(), storage.getAll());
+        Assert.assertArrayEquals(new Resume[0], storage.getAll());
     }
 
     @Test
     public void save() {
+        storage.save(RESUME_4);
         assertSize(4);
         assertGet(RESUME_4);
     }
 
     @Test
     public void update() {
-        storage.update(RESUME_4);
-        assertSame(RESUME_4, RESUME_4);
+        Resume RESUME_1 = new Resume(UUID_1);
+        storage.update(RESUME_1);
+        assertSame(RESUME_1, storage.get(UUID_1));
     }
 
     @Test
     public void get() {
         assertGet(RESUME_1);
+        assertGet(RESUME_2);
+        assertGet(RESUME_3);
     }
 
-    @Test
+    @Test(expected = AssertionError.class)
     public void delete() {
         storage.delete(RESUME_1.getUuid());
         assertSize(3);
-        try {
-            assertGet(null);
-        } catch (Exception e) {
-            System.out.println("Resume does not exist");
-        }
+        assertGet(null);
+        storage.get(UUID_1);
     }
 
     @Test
     public void getAll() {
-        Resume[] expected = new Resume[4];
-        expected[0] = RESUME_1;
-        expected[1] = RESUME_2;
-        expected[2] = RESUME_3;
-        expected[3] = RESUME_4;
+        Resume[] expected = new Resume[]{RESUME_1, RESUME_2, RESUME_3, RESUME_4};
         Assert.assertArrayEquals(expected, storage.getAll());
     }
 
@@ -86,46 +85,36 @@ public abstract class AbstractArrayStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void getNotExist() throws Exception {
-        storage.get("UUID_NOT_EXIST");
+        final Resume RESUME_5 = new Resume();
+        storage.get(RESUME_5.getUuid());
     }
 
-    @Test
+    @Test(expected = ExistStorageException.class)
     public void saveExist() {
-        try {
-            storage.save(RESUME_4);
-        } catch (Exception e) {
-            System.out.println("Resume " + RESUME_4 + " exist.");
-        }
+        storage.save(RESUME_4);
     }
 
 
-    @Test
+    @Test(expected = NotExistStorageException.class)
     public void updateNotExist() {
-        try {
-            storage.update(RESUME_4);
-        } catch (Exception e) {
-            System.out.println("Resume " + RESUME_4 + " not exist.");
-        }
+        storage.update(RESUME_4);
     }
 
-    @Test
+    @Test(expected = NotExistStorageException.class)
     public void deleteNotExist() {
-        try {
-            storage.delete(RESUME_2.getUuid());
-        } catch (Exception e) {
-            System.out.println("Resume " + RESUME_1 + " not exist.");
-        }
+        storage.delete(RESUME_2.getUuid());
     }
 
-    @Test
-    public void stackOverflow() {
+    @Test(expected = AssertionError.class)
+    public void saveOverflow() {
         try {
-            for (int i = AbstractArrayStorage.STORAGE_LIMIT; i <= AbstractArrayStorage.STORAGE_LIMIT; i++) {
+            for (int i = 0; i <= STORAGE_LIMIT; i++) {
                 storage.save(new Resume());
             }
         } catch (Exception e) {
-            Assert.fail("Storage is overflow");
+            Assert.fail("Overflow ahead of time");
         }
+        storage.save(new Resume());
     }
 
     private void assertSize(int size) {
