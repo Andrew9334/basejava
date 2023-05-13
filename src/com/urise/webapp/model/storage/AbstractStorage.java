@@ -3,21 +3,40 @@ package com.urise.webapp.model.storage;
 import com.urise.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
-    protected static final int STORAGE_LIMIT = 10000;
-    protected final Resume STORAGE = new Resume();
-    protected int size = 0;
+    protected abstract Object getSearchKey(String uuid);
 
-    protected abstract void saveResume(Resume r, int index);
+    protected abstract boolean isExist(Object searchKey);
 
-    protected abstract void updateResume(Resume resume);
+    protected abstract Object getExistSearchKey(String uuid);
 
-    protected abstract void deleteResume(String uuid, int index);
+    protected abstract Object getNotExistSearchKey(String uuid);
 
-    protected abstract Resume getResume(String uuid);
+    protected abstract void doSave(Resume resume, Object searchKey);
 
-    public abstract Resume[] getAll();
+    protected abstract Resume doGet(Resume resume, Object searchKey);
 
-    protected abstract int getIndex(String uuid);
+    protected abstract void doDelete(Resume resume, Object searchKey);
 
-    public abstract int size();
+    protected abstract void doUpdate(Resume resume, Object searchKey);
+
+
+    public final void save(Resume resume) {
+        Object searchKey = getExistSearchKey(resume.getUuid());
+        doSave(resume, searchKey);
+    }
+
+    public final void get(Resume resume) {
+        Object searchKey = getExistSearchKey(resume.getUuid());
+        doGet(resume, searchKey);
+    }
+
+    public final void delete(Resume resume) {
+        Object searchKey = getExistSearchKey(resume.getUuid());
+        doDelete(resume, searchKey);
+    }
+
+    public final void update(Resume resume) {
+        Object searchKey = getExistSearchKey(resume.getUuid());
+        doUpdate(resume, searchKey);
+    }
 }

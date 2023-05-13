@@ -7,36 +7,23 @@ import com.urise.webapp.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage {
     @Override
-    protected void saveResume(Resume r, int index) {
-        STORAGE[size] = r;
+    protected void doSave(Resume resume, Object searchKey) {
+        STORAGE[(int) searchKey] = resume;
     }
 
     @Override
-    protected void updateResume(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        STORAGE[index] = resume;
+    protected void doUpdate(Resume resume, Object searchKey) {
+        STORAGE[(int) searchKey] = resume;
     }
 
     @Override
-    protected void deleteResume(String uuid, int index) {
-        index = getIndex(uuid);
-        System.arraycopy(STORAGE, size - 1, STORAGE, index, index + 1);
+    protected void doDelete(Resume resume, Object searchKey) {
+        System.arraycopy(STORAGE, size - 1, STORAGE, (int) searchKey, ((int) searchKey + 1));
     }
 
     @Override
-    protected Resume getResume(String uuid) {
-        int index = getIndex(uuid);
-        return STORAGE[index];
-    }
-
-    @Override
-    protected int getIndex(String uuid) {
-        for (int i = 0; i < size; i++) {
-            if (STORAGE[i].getUuid().equals(uuid)) {
-                return i;
-            }
-        }
-        return -1;
+    protected Resume doGet(Resume resume, Object searchKey) {
+        return STORAGE[(int) searchKey] = resume;
     }
 }
 

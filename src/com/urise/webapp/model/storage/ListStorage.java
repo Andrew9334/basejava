@@ -4,30 +4,30 @@ import com.urise.webapp.model.Resume;
 
 import java.util.*;
 
-public abstract class ListStorage extends AbstractStorage {
+public class ListStorage extends AbstractStorage {
     private static final List STORAGE = new ArrayList();
 
     @Override
-    protected void saveResume(Resume r, int index) {
-        STORAGE.add(r);
+    protected void doSave(Resume resume, Object searchKey) {
+        STORAGE.add(resume);
     }
 
     @Override
-    protected void updateResume(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        STORAGE.set(index, resume);
+    protected void doUpdate(Resume resume, Object searchKey) {
+        searchKey = getSearchKey(resume.getUuid());
+        STORAGE.set((int) searchKey, resume);
     }
 
     @Override
-    protected void deleteResume(String uuid, int index) {
-        index = getIndex(uuid);
-        STORAGE.remove(index);
+    protected void doDelete(Resume resume, Object searchKey) {
+        searchKey = getSearchKey(resume.getUuid());
+        STORAGE.remove(searchKey);
     }
 
     @Override
-    protected Resume getResume(String uuid) {
-        int index = getIndex(uuid);
-        return (Resume) STORAGE.get(index);
+    protected Resume doGet(Resume resume, Object searchKey) {
+        searchKey = getSearchKey(resume.getUuid());
+        return (Resume) STORAGE.get((int) searchKey);
     }
 
     @Override
@@ -37,13 +37,5 @@ public abstract class ListStorage extends AbstractStorage {
 
     public int size() {
         return STORAGE.size();
-    }
-
-    @Override
-    protected int getIndex(String uuid) {
-        if (STORAGE.indexOf(uuid) > 0) {
-            return STORAGE.indexOf(uuid);
-        }
-        return -1;
     }
 }
