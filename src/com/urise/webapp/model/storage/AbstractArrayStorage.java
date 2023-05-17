@@ -1,6 +1,5 @@
 package com.urise.webapp.model.storage;
 
-import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -29,24 +28,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
             return true;
         }
         return false;
-    }
-
-    @Override
-    protected Object getExistSearchKey(String uuid) {
-        Object searchKey = getSearchKey(uuid);
-        if (isExist(searchKey)) {
-            return searchKey;
-        }
-        return new NotExistStorageException(uuid);
-    }
-
-    @Override
-    protected Object getNotExistSearchKey(String uuid) {
-        Object searchKey = getSearchKey(uuid);
-        if (!isExist(searchKey)) {
-            return new NotExistStorageException(uuid);
-        }
-        return searchKey;
     }
 
     @Override

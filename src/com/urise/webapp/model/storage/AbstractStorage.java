@@ -19,7 +19,7 @@ public abstract class AbstractStorage implements Storage {
 
 
     public final void save(Resume resume) {
-        Object searchKey = getExistSearchKey(resume.getUuid());
+        Object searchKey = getNotExistSearchKey(resume.getUuid());
         doSave(resume, searchKey);
     }
 
