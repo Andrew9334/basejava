@@ -1,5 +1,6 @@
 package com.urise.webapp.model.storage;
 
+import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -14,48 +15,59 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size = 0;
     }
 
-    public final void save(Resume r) {
-        int index = getIndex(r.getUuid());
-
-        if (size >= STORAGE_LIMIT) {
-            System.out.println("Error: переполнение списка");
-        } else if (index != -1) {
-            System.out.println("Error: резюме с uuid " + r.getUuid() + " уже существует");
-        } else {
-            saveResume(r, index);
-            size++;
-        }
+    @Override
+    protected Object getSearchKey(String uuid) {
+        Resume searchKey = new Resume();
+        searchKey.getUuid();
+        return Arrays.binarySearch(STORAGE, 0, size, searchKey);
     }
 
-    public final void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-
-        if (index == -1) {
-            System.out.println("Error: резюме " + resume.getUuid() + " не существует");
-        } else {
-            updateResume(resume);
+    @Override
+    protected boolean isExist(Object searchKey) {
+        Resume resume = new Resume();
+        if (searchKey == getSearchKey(resume.getUuid())) {
+            return true;
         }
+        return false;
     }
 
-    public final Resume get(String uuid) {
-        int index = getIndex(uuid);
-
-        if (index == -1) {
-            System.out.println("Error: резюме " + uuid + " не существует");
-            return null;
+    @Override
+    protected Object getExistSearchKey(String uuid) {
+        Object searchKey = getSearchKey(uuid);
+        if (isExist(searchKey)) {
+            return searchKey;
         }
-        return getResume(uuid);
+        return new NotExistStorageException(uuid);
     }
 
-    public final void delete(String uuid) {
-        int index = getIndex(uuid);
-
-        if (index == -1) {
-            System.out.println("Error: резюме " + uuid + " не существует");
-        } else {
-            deleteResume(uuid, index);
-            size--;
+    @Override
+    protected Object getNotExistSearchKey(String uuid) {
+        Object searchKey = getSearchKey(uuid);
+        if (!isExist(searchKey)) {
+            return new NotExistStorageException(uuid);
         }
+        return searchKey;
+    }
+
+    @Override
+    protected void doSave(Resume resume, Object searchKey) {
+        searchKey = getSearchKey(resume.getUuid());
+    }
+
+    @Override
+    protected void doUpdate(Resume resume, Object searchKey) {
+        searchKey = getSearchKey(resume.getUuid());
+    }
+
+    @Override
+    protected void doDelete(Resume resume, Object searchKey) {
+        searchKey = getSearchKey(resume.getUuid());
+    }
+
+    @Override
+    protected Resume doGet(Resume resume, Object searchKey) {
+        searchKey = getSearchKey(resume.getUuid());
+        return null;
     }
 
     public Resume[] getAll() {

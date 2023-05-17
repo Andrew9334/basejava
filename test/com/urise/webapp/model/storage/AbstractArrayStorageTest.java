@@ -124,5 +124,4 @@ public abstract class AbstractArrayStorageTest {
     private void assertGet(Resume resume) {
         assertEquals(storage.get(resume.getUuid()), resume);
     }
-
 }
