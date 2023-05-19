@@ -19,19 +19,8 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected Resume doGet(Resume resume, Object searchKey) {
+    protected Resume doGet(Object searchKey) {
+        Resume resume = new Resume();
         return STORAGE[(int) searchKey] = resume;
-    }
-
-    @Override
-    public Resume get(String uuid) {
-        return new Resume(uuid);
-    }
-
-    @Override
-    public void delete(String uuid) {
-        Resume resume = new Resume(uuid);
-        Object searchKey = getSearchKey(uuid);
-        doDelete(resume, STORAGE[(int) searchKey]);
     }
 }

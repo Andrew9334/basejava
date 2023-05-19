@@ -46,9 +46,10 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume doGet(Resume resume, Object searchKey) {
+    protected Resume doGet(Object searchKey) {
+        Resume resume = new Resume();
         searchKey = getSearchKey(resume.getUuid());
-        return null;
+        return resume;
     }
 
     public Resume[] getAll() {

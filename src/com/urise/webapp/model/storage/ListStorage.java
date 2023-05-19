@@ -40,7 +40,8 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume doGet(Resume resume, Object searchKey) {
+    protected Resume doGet(Object searchKey) {
+        Resume resume = new Resume();
         searchKey = getSearchKey(resume.getUuid());
         return (Resume) STORAGE.get((int) searchKey);
     }
@@ -48,18 +49,6 @@ public class ListStorage extends AbstractStorage {
     @Override
     public void clear() {
         STORAGE.clear();
-    }
-
-    @Override
-    public Resume get(String uuid) {
-        return new Resume(uuid);
-    }
-
-    @Override
-    public void delete(String uuid) {
-        Resume resume = new Resume(uuid);
-        Object searchKey = getSearchKey(uuid);
-        doDelete(resume, STORAGE.get((int) searchKey));
     }
 
     @Override
