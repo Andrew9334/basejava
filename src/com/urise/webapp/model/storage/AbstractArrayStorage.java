@@ -1,5 +1,6 @@
 package com.urise.webapp.model.storage;
 
+import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -15,41 +16,35 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Object getSearchKey(String uuid) {
-        Resume searchKey = new Resume();
-        searchKey.getUuid();
-        return Arrays.binarySearch(STORAGE, 0, size, searchKey);
+    protected boolean isExist(Integer searchKey) {
+        return searchKey >= 0;
     }
 
     @Override
-    protected boolean isExist(Object searchKey) {
-        Resume resume = new Resume();
-        if (searchKey == getSearchKey(resume.getUuid())) {
-            return true;
+    protected void doSave(Resume resume, Integer searchKey) {
+        if (size == STORAGE_LIMIT) {
+            throw new StorageException("Storage is overflow", resume.getUuid());
         }
-        return false;
+        saveResume(resume, searchKey);
+        size++;
     }
 
     @Override
-    protected void doSave(Resume resume, Object searchKey) {
-        searchKey = getSearchKey(resume.getUuid());
+    protected void doUpdate(Resume resume, Integer searchKey) {
+        STORAGE[searchKey] = resume;
     }
 
     @Override
-    protected void doUpdate(Resume resume, Object searchKey) {
-        searchKey = getSearchKey(resume.getUuid());
+    protected void doDelete(Integer searchKey) {
+        if (searchKey < 0) {
+            System.out.println("Resume is not exist");
+        }
+        deleteResume(searchKey);
     }
 
     @Override
-    protected void doDelete(Resume resume, Object searchKey) {
-        searchKey = getSearchKey(resume.getUuid());
-    }
-
-    @Override
-    protected Resume doGet(Object searchKey) {
-        Resume resume = new Resume();
-        searchKey = getSearchKey(resume.getUuid());
-        return resume;
+    protected Resume doGet(Integer searchKey) {
+        return STORAGE[searchKey];
     }
 
     public Resume[] getAll() {
@@ -59,4 +54,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     public int size() {
         return size;
     }
+
+    protected abstract void saveResume(Resume resume, Integer searchKey);
+
+    protected abstract void deleteResume(Integer searchKey);
 }

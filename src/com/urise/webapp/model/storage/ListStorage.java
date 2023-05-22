@@ -8,42 +8,38 @@ public class ListStorage extends AbstractStorage {
     private static final List STORAGE = new ArrayList();
 
     @Override
-    protected Object getSearchKey(String uuid) {
-        Object searchKey = getSearchKey(uuid);
-        return searchKey;
-    }
-
-    @Override
-    protected boolean isExist(Object searchKey) {
-        Resume resume = new Resume();
-        if (searchKey == getSearchKey(resume.getUuid())) {
-            return true;
+    protected Integer getSearchKey(String uuid) {
+        for (int i = 0; i < STORAGE.size(); i++) {
+            if (uuid.equals(STORAGE.get(i))) {
+                return i;
+            }
         }
-        return false;
+        return null;
     }
 
     @Override
-    protected void doSave(Resume resume, Object searchKey) {
+    protected boolean isExist(Integer searchKey) {
+        return Objects.isNull(searchKey);
+    }
+
+    @Override
+    protected void doSave(Resume resume, Integer searchKey) {
         STORAGE.add(resume);
     }
 
     @Override
-    protected void doUpdate(Resume resume, Object searchKey) {
-        searchKey = getSearchKey(resume.getUuid());
-        STORAGE.set((int) searchKey, resume);
+    protected void doUpdate(Resume resume, Integer searchKey) {
+        STORAGE.set(searchKey, resume);
     }
 
     @Override
-    protected void doDelete(Resume resume, Object searchKey) {
-        searchKey = getSearchKey(resume.getUuid());
+    protected void doDelete(Integer searchKey) {
         STORAGE.remove(searchKey);
     }
 
     @Override
-    protected Resume doGet(Object searchKey) {
-        Resume resume = new Resume();
-        searchKey = getSearchKey(resume.getUuid());
-        return (Resume) STORAGE.get((int) searchKey);
+    protected Resume doGet(Integer searchKey) {
+        return (Resume) STORAGE.get(searchKey);
     }
 
     @Override
@@ -53,7 +49,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        return (Resume[]) STORAGE.toArray(new Resume[]{(Resume) STORAGE});
+        return (Resume[]) STORAGE.toArray(new Resume[0]);
     }
 
     public int size() {

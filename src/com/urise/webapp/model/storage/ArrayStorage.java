@@ -6,25 +6,26 @@ import com.urise.webapp.model.Resume;
  * Array based storage for Resumes
  */
 public class ArrayStorage extends AbstractArrayStorage {
+
     @Override
-    protected void doSave(Resume resume, Object searchKey) {
-        STORAGE[(int) searchKey] = resume;
+    protected void saveResume(Resume resume, Integer searchKey) {
+        STORAGE[searchKey] = resume;
     }
 
     @Override
-    protected void doUpdate(Resume resume, Object searchKey) {
-        STORAGE[(int) searchKey] = resume;
+    protected void deleteResume(Integer searchKey) {
+        System.arraycopy(STORAGE, size - 1, STORAGE, searchKey, searchKey + 1);
     }
 
-    @Override
-    protected void doDelete(Resume resume, Object searchKey) {
-        System.arraycopy(STORAGE, size - 1, STORAGE, (int) searchKey, ((int) searchKey + 1));
-    }
 
     @Override
-    protected Resume doGet(Object searchKey) {
-        Resume resume = new Resume();
-        return STORAGE[(int) searchKey] = resume;
+    protected Integer getSearchKey(String uuid) {
+        for (int i = 0; i < size; i++) {
+            if (STORAGE[i].getUuid().equals(uuid)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
 
