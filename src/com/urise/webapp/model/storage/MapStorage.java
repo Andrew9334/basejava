@@ -2,52 +2,39 @@ package com.urise.webapp.model.storage;
 
 import com.urise.webapp.model.Resume;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.UUID;
 
 public class MapStorage extends AbstractStorage {
-    final static HashMap <UUID, Resume> STORAGE = new HashMap<>();
-
+    final static HashMap <String, Resume> STORAGE = new HashMap<>();
 
     @Override
     protected Object getSearchKey(String uuid) {
-        Object searchKey = getSearchKey(uuid);
-        return searchKey;
+        return Integer.valueOf(uuid);
     }
 
     @Override
     protected boolean isExist(Object searchKey) {
-        Resume resume = new Resume();
-        if (searchKey == getSearchKey(resume.getUuid())) {
-            return true;
-        }
-        return false;
+        return STORAGE.containsKey(searchKey);
     }
 
     @Override
     protected void doSave(Resume resume, Object searchKey) {
-        searchKey = getSearchKey(resume.getUuid());
-        STORAGE.put((UUID) searchKey, resume);
-    }
-
-    @Override
-    protected Resume doGet(Object searchKey) {
-        Resume resume = new Resume();
-        searchKey = getSearchKey(resume.getUuid());
-        return STORAGE.get(searchKey);
-    }
-
-    @Override
-    protected void doDelete(Resume resume, Object searchKey) {
-        searchKey = getSearchKey(resume.getUuid());
-        STORAGE.remove(searchKey, resume);
+        STORAGE.put(String.valueOf(searchKey), resume);
     }
 
     @Override
     protected void doUpdate(Resume resume, Object searchKey) {
-        searchKey = getSearchKey(resume.getUuid());
-        STORAGE.replace((UUID) searchKey, resume);
+        STORAGE.replace(String.valueOf(searchKey), resume);
+    }
+
+    @Override
+    protected void doDelete(Object searchKey) {
+        STORAGE.remove(searchKey);
+    }
+
+    @Override
+    protected Resume doGet(Object searchKey) {
+        return STORAGE.get(searchKey);
     }
 
     @Override
@@ -57,7 +44,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        return Arrays.asList(new HashMap[]{STORAGE});
+        return (Resume[]) STORAGE.entrySet().toArray();
     }
 
     @Override
