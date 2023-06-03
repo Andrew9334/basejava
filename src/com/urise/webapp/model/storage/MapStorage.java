@@ -9,7 +9,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected Object getSearchKey(String uuid) {
-        return Integer.valueOf(uuid);
+        return uuid;
     }
 
     @Override
@@ -19,12 +19,12 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected void doSave(Resume resume, Object searchKey) {
-        STORAGE.put(String.valueOf(searchKey), resume);
+        STORAGE.put((String) searchKey, resume);
     }
 
     @Override
     protected void doUpdate(Resume resume, Object searchKey) {
-        STORAGE.replace(String.valueOf(searchKey), resume);
+        STORAGE.replace((String) searchKey, resume);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        return (Resume[]) STORAGE.entrySet().toArray();
+        return STORAGE.values().toArray(new Resume[0]);
     }
 
     @Override
