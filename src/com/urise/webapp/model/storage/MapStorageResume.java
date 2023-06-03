@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MapStorage extends AbstractStorage {
-    final static HashMap <String, Resume> STORAGE = new HashMap<>();
+public class MapStorageResume extends AbstractStorage{
+    final static HashMap<String, Resume> STORAGE = new HashMap<>();
 
     @Override
     protected Object getSearchKey(String uuid) {
-        return uuid;
+        return new Resume();
     }
 
     @Override
