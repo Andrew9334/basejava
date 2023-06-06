@@ -1,12 +1,15 @@
 package com.urise.webapp.model.storage;
 
-import com.urise.webapp.Storage;
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.Storage;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static com.urise.webapp.model.storage.AbstractArrayStorage.STORAGE_LIMIT;
 import static org.junit.Assert.assertEquals;
@@ -70,6 +73,13 @@ public abstract class AbstractStorageTest {
         storage.delete(RESUME_1.getUuid());
         assertSize(2);
         storage.get(UUID_1);
+    }
+
+    @Test
+    public void getAllSorted() {
+        List<Resume> list = storage.getAllSorted();
+        assertEquals(3, list.size());
+        assertEquals(list, Arrays.asList(RESUME_1, RESUME_2, RESUME_3));
     }
 
     @Test
