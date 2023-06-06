@@ -20,7 +20,7 @@ public class MainString {
         String str2 = ("ab" + str3).intern();
         System.out.println(str1 == str2);
 
-        Resume resume = new Resume();
+        Resume resume = new Resume("");
         Class classResume = resume.getClass();
 
         try {

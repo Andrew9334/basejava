@@ -40,14 +40,19 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
+    protected List<Resume> doCopyAll() {
+        return new ArrayList<>(STORAGE.values());
+    }
+
+    @Override
     public void clear() {
         STORAGE.clear();
     }
 
-    @Override
-    public List<Resume> getAllSorted() {
-        return new ArrayList<>(STORAGE.values());
-    }
+//    @Override
+//    public List<Resume> getAllSorted() {
+//        return new ArrayList<>(STORAGE.values());
+//    }
 
     @Override
     public int size() {

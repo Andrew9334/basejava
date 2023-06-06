@@ -1,14 +1,12 @@
 package com.urise.webapp.model.storage;
 
+import com.urise.webapp.Storage;
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static com.urise.webapp.model.storage.AbstractArrayStorage.STORAGE_LIMIT;
 import static org.junit.Assert.assertEquals;
@@ -21,12 +19,11 @@ public abstract class AbstractStorageTest {
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
-    private static final String fullName1 = "Jack";
 
-    private static final Resume RESUME_1 = new Resume(UUID_1, "nothing");
-    private static final Resume RESUME_2 = new Resume(UUID_2, "nothing");
-    private static final Resume RESUME_3 = new Resume(UUID_3, "nothing");
-    private static final Resume RESUME_4 = new Resume(UUID_4, "nothing");
+    private static final Resume RESUME_1 = new Resume(UUID_1, "No name");
+    private static final Resume RESUME_2 = new Resume(UUID_2, "No name");
+    private static final Resume RESUME_3 = new Resume(UUID_3, "No name");
+    private static final Resume RESUME_4 = new Resume(UUID_4, "No name");
 
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -71,15 +68,8 @@ public abstract class AbstractStorageTest {
     @Test(expected = AssertionError.class)
     public void delete() {
         storage.delete(RESUME_1.getUuid());
-        assertSize(3);
+        assertSize(2);
         storage.get(UUID_1);
-    }
-
-    @Test
-    public void getAllSorted() {
-        List<Resume> list = storage.getAllSorted();
-        assertSize(3);
-        assertEquals(list, Arrays.asList(RESUME_1, RESUME_2, RESUME_3));
     }
 
     @Test
@@ -111,12 +101,12 @@ public abstract class AbstractStorageTest {
     public void saveOverflow() {
         try {
             for (int i = 0; i <= STORAGE_LIMIT; i++) {
-                storage.save(new Resume());
+                storage.save(new Resume(""));
             }
         } catch (Exception e) {
             Assert.fail("Overflow ahead of time");
         }
-        storage.save(new Resume());
+        storage.save(new Resume(""));
     }
 
     private void assertSize(int size) {

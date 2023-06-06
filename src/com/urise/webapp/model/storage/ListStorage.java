@@ -39,17 +39,17 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected Resume doGet(Object searchKey) {
-        return (Resume) STORAGE.get((int) searchKey);
+        return STORAGE.get((int) searchKey);
+    }
+
+    @Override
+    protected List<Resume> doCopyAll() {
+        return new ArrayList<>(STORAGE);
     }
 
     @Override
     public void clear() {
         STORAGE.clear();
-    }
-
-    @Override
-    public List<Resume> getAllSorted() {
-        return STORAGE;
     }
 
     public int size() {

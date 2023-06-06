@@ -1,7 +1,11 @@
 package com.urise.webapp.model.storage;
 
 import com.urise.webapp.model.Resume;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
 
@@ -15,6 +19,13 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
     protected void deleteResume(Object searchKey) {
         System.arraycopy(STORAGE, (int) searchKey + 1, STORAGE, (int) searchKey, size - (int) searchKey - 1);
+    }
+
+    @Override
+    protected List<Resume> doCopyAll() {
+        List<Resume> list = new ArrayList<>();
+        Collections.addAll(list, STORAGE);
+        return list;
     }
 
     @Override
