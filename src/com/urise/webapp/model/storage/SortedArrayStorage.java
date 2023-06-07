@@ -4,7 +4,6 @@ import com.urise.webapp.model.Resume;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
@@ -23,9 +22,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected List<Resume> doCopyAll() {
-        List<Resume> list = new ArrayList<>();
-        Collections.addAll(list, STORAGE);
-        return list;
+        return new ArrayList<>(Arrays.asList(Arrays.copyOfRange(STORAGE, 0, size)));
     }
 
     @Override

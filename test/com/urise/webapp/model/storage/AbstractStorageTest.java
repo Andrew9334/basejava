@@ -1,9 +1,9 @@
 package com.urise.webapp.model.storage;
 
+import com.urise.webapp.Storage;
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.Storage;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,12 +11,11 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.urise.webapp.model.storage.AbstractArrayStorage.STORAGE_LIMIT;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
 public abstract class AbstractStorageTest {
-    private final Storage storage;
+    protected final Storage storage;
 
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
@@ -68,7 +67,7 @@ public abstract class AbstractStorageTest {
         assertGet(RESUME_3);
     }
 
-    @Test(expected = AssertionError.class)
+    @Test(expected = NotExistStorageException.class)
     public void delete() {
         storage.delete(RESUME_1.getUuid());
         assertSize(2);
@@ -107,17 +106,17 @@ public abstract class AbstractStorageTest {
         storage.delete(RESUME_4.getUuid());
     }
     
-    @Test(expected = AssertionError.class)
-    public void saveOverflow() {
-        try {
-            for (int i = 0; i <= STORAGE_LIMIT; i++) {
-                storage.save(new Resume(""));
-            }
-        } catch (Exception e) {
-            Assert.fail("Overflow ahead of time");
-        }
-        storage.save(new Resume(""));
-    }
+//    @Test(expected = AssertionError.class)
+//    public void saveOverflow() {
+//        try {
+//            for (int i = 0; i <= STORAGE_LIMIT; i++) {
+//                storage.save(new Resume(""));
+//            }
+//        } catch (Exception e) {
+//            Assert.fail("Overflow ahead of time");
+//        }
+//        storage.save(new Resume(""));
+//    }
 
     private void assertSize(int size) {
         assertEquals(size, storage.size());

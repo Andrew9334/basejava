@@ -9,7 +9,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int STORAGE_LIMIT = 10000;
     protected final Resume[] STORAGE = new Resume[STORAGE_LIMIT];
     protected int size = 0;
-    private static final Comparator<Resume> RESUME_COMPARATOR = ((o1, o2) -> o1.getUuid().compareTo(o2.getUuid()));
 
     public void clear() {
         Arrays.fill(STORAGE, 0, size, null);
@@ -44,13 +43,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     @Override
     protected Resume doGet(Object searchKey) {
         return STORAGE[(int) searchKey];
-    }
-
-    @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> list = new ArrayList<>();
-        Collections.sort(list);
-        return list;
     }
 
     public int size() {
