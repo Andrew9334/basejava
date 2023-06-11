@@ -8,9 +8,11 @@ import org.junit.Test;
 
 import static com.urise.webapp.model.storage.AbstractArrayStorage.STORAGE_LIMIT;
 
-public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
+public abstract class AbstractArrayStorageTest extends AbstractStorage {
+    protected final Storage storage;
+
     protected AbstractArrayStorageTest(Storage storage) {
-        super(storage);
+        this.storage = storage;
     }
 
     @Test(expected = StorageException.class)

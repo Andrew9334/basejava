@@ -1,7 +1,6 @@
 package com.urise.webapp.model.storage;
 
 import com.urise.webapp.model.Resume;
-
 import java.util.*;
 
 public class MapStorageResume extends AbstractStorage {
@@ -19,23 +18,23 @@ public class MapStorageResume extends AbstractStorage {
 
     @Override
     protected void doSave(Resume resume, Object searchKey) {
-        storage.put((String) searchKey, resume);
+        storage.put(resume.getUuid(), resume);
     }
 
     @Override
     protected void doUpdate(Resume resume, Object searchKey) {
-        storage.replace((String) searchKey, resume);
+        storage.replace(resume.getUuid(), resume);
     }
 
     @Override
     protected void doDelete(Object searchKey) {
-        Resume resume = new Resume((String) searchKey);
+        Resume resume = (Resume) searchKey;
         storage.remove(resume.getUuid());
     }
 
     @Override
     protected Resume doGet(Object searchKey) {
-        Resume resume = new Resume((String) searchKey);
+        Resume resume = (Resume) searchKey;
         return storage.get(resume.getUuid());
     }
 
