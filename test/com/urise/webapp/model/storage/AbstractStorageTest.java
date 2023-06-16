@@ -105,18 +105,6 @@ public abstract class AbstractStorageTest {
     public void deleteNotExist() {
         storage.delete(RESUME_4.getUuid());
     }
-    
-//    @Test(expected = AssertionError.class)
-//    public void saveOverflow() {
-//        try {
-//            for (int i = 0; i <= STORAGE_LIMIT; i++) {
-//                storage.save(new Resume(""));
-//            }
-//        } catch (Exception e) {
-//            Assert.fail("Overflow ahead of time");
-//        }
-//        storage.save(new Resume(""));
-//    }
 
     private void assertSize(int size) {
         assertEquals(size, storage.size());
