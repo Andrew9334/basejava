@@ -12,12 +12,12 @@ import java.util.List;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void saveResume(Resume resume, Object searchKey) {
+    protected void saveResume(Resume resume, int searchKey) {
         STORAGE[size] = resume;
     }
 
     @Override
-    protected void deleteResume(Object searchKey) {
+    protected void deleteResume(int searchKey) {
         System.arraycopy(STORAGE, size - 1, STORAGE, (int) searchKey, 1);
     }
 

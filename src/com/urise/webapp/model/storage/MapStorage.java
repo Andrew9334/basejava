@@ -6,36 +6,36 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MapStorage extends AbstractStorage {
+public class MapStorage extends AbstractStorage<String> {
     final static HashMap <String, Resume> STORAGE = new HashMap<>();
 
     @Override
-    protected Object getSearchKey(String uuid) {
+    protected String getSearchKey(String uuid) {
         return uuid;
     }
 
     @Override
-    protected boolean isExist(Object searchKey) {
+    protected boolean isExist(String searchKey) {
         return STORAGE.containsKey(searchKey);
     }
 
     @Override
-    protected void doSave(Resume resume, Object searchKey) {
-        STORAGE.put((String) searchKey, resume);
+    protected void doSave(Resume resume, String searchKey) {
+        STORAGE.put(searchKey, resume);
     }
 
     @Override
-    protected void doUpdate(Resume resume, Object searchKey) {
-        STORAGE.replace((String) searchKey, resume);
+    protected void doUpdate(Resume resume, String searchKey) {
+        STORAGE.replace(searchKey, resume);
     }
 
     @Override
-    protected void doDelete(Object searchKey) {
+    protected void doDelete(String searchKey) {
         STORAGE.remove(searchKey);
     }
 
     @Override
-    protected Resume doGet(Object searchKey) {
+    protected Resume doGet(String searchKey) {
         return STORAGE.get(searchKey);
     }
 

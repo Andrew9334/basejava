@@ -9,15 +9,15 @@ import java.util.List;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void saveResume(Resume resume, Object searchKey) {
-        int indexSave = - (int) searchKey - 1;
+    protected void saveResume(Resume resume, int searchKey) {
+        int indexSave = - searchKey - 1;
         System.arraycopy(STORAGE, indexSave, STORAGE, indexSave + 1, size - indexSave  );
         STORAGE[indexSave] = resume;
     }
 
     @Override
-    protected void deleteResume(Object searchKey) {
-        System.arraycopy(STORAGE, (int) searchKey + 1, STORAGE, (int) searchKey, size - (int) searchKey - 1);
+    protected void deleteResume(int searchKey) {
+        System.arraycopy(STORAGE, searchKey + 1, STORAGE, searchKey, size - searchKey - 1);
     }
 
     @Override
