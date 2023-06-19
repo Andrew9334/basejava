@@ -1,5 +1,7 @@
 package com.urise.webapp.model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -9,6 +11,9 @@ public class Resume implements Comparable<Resume> {
     // Unique identifier
     private String uuid;
     private String fullName;
+
+    Map<ContactType, String> contactTypeMap = new HashMap<>();
+    Map<SectionType, AbstractSection> sectionTypeMap = new HashMap<>();
 
     public Resume(String uuid, String fullName) {
         this.uuid = uuid;

@@ -9,7 +9,7 @@ public class CompanySection extends AbstractSection {
     static List<Company.Period> company = new ArrayList<>();
 
     static class Company {
-        List<Period> periods = new ArrayList<>();
+        private final List<Period> periods = new ArrayList<>();
         private String name;
         private String webSite;
 

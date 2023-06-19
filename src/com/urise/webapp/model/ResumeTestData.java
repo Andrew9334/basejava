@@ -19,8 +19,8 @@ public class ResumeTestData {
 
         company.setName("Horns and hooves");
         company.setWebSite("www.hornsandhooves.ussr");
-        company.periods.add(period);
-        companySection.company.add(period);
+//        company.periods.add(period);
+        CompanySection.company.add(period);
 
         for (int i = 0; i < companySection.company.size(); i++) {
             System.out.println(companySection.company.get(i));
