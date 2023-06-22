@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 public abstract class AbstractFileStorage extends AbstractStorage<File> {
-    private File directory;
+    private final File directory;
 
     protected AbstractFileStorage(File directory) {
         Objects.requireNonNull(directory, "directory must not be null");
@@ -25,10 +25,10 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        try {
-            new FileWriter(directory, false).close();
+        try (RandomAccessFile raf = new RandomAccessFile(directory, "rw")) {
+            raf.setLength(0);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new NotExistStorageException("File is not exist");
         }
     }
 
@@ -61,7 +61,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected void doUpdate(Resume resume, File file) {
         try {
-            file.createNewFile();
+            doWrite(resume, file);
         } catch (IOException e) {
             throw new NotExistStorageException(file.getName());
         }
@@ -69,38 +69,37 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void doDelete(File file) {
-        try {
-            FileWriter fileWriter = new FileWriter(file, false);
-            fileWriter.write("");
-            fileWriter.close();
-        } catch (IOException e) {
-            throw new NotExistStorageException(file.getName());
-        }
-
+        file.delete();
     }
 
     @Override
     protected Resume doGet(File file) {
-        return null;
+        try {
+            return doRead(file);
+        } catch (IOException e) {
+            throw new NotExistStorageException("File is not exist");
+        }
     }
 
     @Override
     protected List<Resume> doCopyAll() {
-        List<String> listFile = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(directory))) {
-            while (br.ready()) {
-                listFile.add(br.readLine());
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        File[] file = directory.listFiles();
+        if(file == null) {
+            throw new StorageException("File is not exist", null);
         }
+        List<Resume> list = new ArrayList<>(file.length);
 
-        List<Resume> list = new ArrayList<>();
-        list.add((Resume) listFile);
+        for (File files : file) {
+            try {
+                list.add(doRead(files));
+            } catch (IOException e) {
+                throw new NotExistStorageException("File is not exist");
+            }
+        }
         return list;
     }
 
     protected abstract void doWrite(Resume resume, File file) throws IOException;
+
+    protected abstract Resume doRead(File file) throws IOException;
 }
