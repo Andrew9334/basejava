@@ -4,7 +4,8 @@ import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,16 +26,21 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        try (RandomAccessFile raf = new RandomAccessFile(directory, "rw")) {
-            raf.setLength(0);
-        } catch (IOException e) {
-            throw new NotExistStorageException("File is not exist");
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                doDelete(file);
+            }
         }
     }
 
     @Override
     public int size() {
-        return (int) directory.length();
+        String[] files = directory.list();
+        if (files == null) {
+            throw new StorageException("File is not exist", null);
+        }
+        return files.length;
     }
 
     @Override
@@ -44,7 +50,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected boolean isExist(File file) {
-        return directory.exists();
+        return file.exists();
     }
 
     @Override
@@ -55,7 +61,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         } catch (IOException e) {
             throw new StorageException("IO error ", file.getName(), e);
         }
-
     }
 
     @Override
@@ -70,6 +75,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected void doDelete(File file) {
         file.delete();
+        if (!file.delete()) {
+            throw new StorageException("File is not delete", file.getName());
+        }
     }
 
     @Override
@@ -84,17 +92,13 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected List<Resume> doCopyAll() {
         File[] file = directory.listFiles();
-        if(file == null) {
+        if (file == null) {
             throw new StorageException("File is not exist", null);
         }
         List<Resume> list = new ArrayList<>(file.length);
 
         for (File files : file) {
-            try {
-                list.add(doRead(files));
-            } catch (IOException e) {
-                throw new NotExistStorageException("File is not exist");
-            }
+            list.add(doGet(files));
         }
         return list;
     }
