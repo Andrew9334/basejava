@@ -3,6 +3,7 @@ package com.urise.webapp.model.storage;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
+import java.io.IOException;
 import java.util.*;
 
 public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
@@ -23,7 +24,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     @Override
     protected void doSave(Resume resume, Integer searchKey) {
         if (size == STORAGE_LIMIT) {
-            throw new StorageException("Storage is overflow", resume.getUuid());
+            throw new StorageException("Storage is overflow", resume.getUuid(), new IOException());
         }
         saveResume(resume, searchKey);
         size++;
