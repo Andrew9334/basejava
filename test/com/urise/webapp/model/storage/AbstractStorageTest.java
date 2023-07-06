@@ -13,13 +13,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 
 public abstract class AbstractStorageTest {
-//    protected static final Path STORAGE_PATH = Path.of("C:\\Users\\MSI\\Desktop\\testStorage");
+//    protected static final Path STORAGE_PATH = Paths.get("C:\\Users\\MSI\\Desktop\\testStorage");
     protected static final File STORAGE_DIR = new File("C:\\Users\\MSI\\Desktop\\testStorage");
     protected final Storage storage;
-
 
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
@@ -61,7 +59,7 @@ public abstract class AbstractStorageTest {
     public void update() throws Exception{
         Resume RESUME_1 = new Resume(UUID_1, "");
         storage.update(RESUME_1);
-        assertSame(RESUME_1, storage.get(UUID_1));
+        assertEquals(RESUME_1, storage.get(UUID_1));
     }
 
     @Test

@@ -4,23 +4,26 @@ import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 
 public class ObjectStreamPathStorage extends AbstractStorage<Path> {
     private final Path path;
+    private final StrategyFiles strategyFiles;
 
-    private StrategyFiles strategyFiles;
-
-    public ObjectStreamPathStorage(Path directory) {
+    public ObjectStreamPathStorage(String directory, StrategyFiles st) {
         Objects.requireNonNull(directory, "Directory must be not null");
-        if (!Files.isDirectory(directory)) {
+        if (!Files.isDirectory(Path.of(directory))) {
             throw new IllegalArgumentException();
         }
-        this.path = directory;
+        this.strategyFiles = st;
+        path = Paths.get(directory);
     }
 
     @Override
@@ -31,7 +34,8 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
                 doDelete(Path.of(file));
             }
         } catch (IOException e) {
-            throw new StorageException("File is not exist", null);
+            e.printStackTrace();
+//            throw new StorageException("File is not exist", null);
         }
     }
 

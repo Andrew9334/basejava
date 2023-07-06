@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> implements StrategyFiles {
+public class FileStorage extends AbstractStorage<File> {
     private final File directory;
 
-    private StrategyFiles st;
+    private final StrategyFiles st;
 
-    protected AbstractFileStorage(File directory) {
+    protected FileStorage(File directory, StrategyFiles strategyFiles) {
         Objects.requireNonNull(directory, "directory must not be null");
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
@@ -23,6 +23,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> implemen
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not readable/writeable");
         }
         this.directory = directory;
+        this.st = strategyFiles;
     }
 
     @Override

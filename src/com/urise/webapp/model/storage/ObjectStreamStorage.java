@@ -5,12 +5,7 @@ import com.urise.webapp.model.Resume;
 
 import java.io.*;
 
-public class ObjectStreamStorage extends AbstractFileStorage implements StrategyFiles {
-    StrategyFiles st;
-    public ObjectStreamStorage(File directory) {
-        super(directory);
-    }
-
+public class ObjectStreamStorage implements StrategyFiles {
     @Override
     public void doWrite(Resume resume, OutputStream os) throws IOException {
         try (ObjectOutputStream oos = new ObjectOutputStream(os)) {
