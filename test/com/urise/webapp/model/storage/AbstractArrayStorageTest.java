@@ -3,10 +3,12 @@ package com.urise.webapp.model.storage;
 import com.urise.webapp.Storage;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.storage.AbstractStorage;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static com.urise.webapp.model.storage.AbstractArrayStorage.STORAGE_LIMIT;
+import static com.urise.webapp.storage.AbstractArrayStorage.STORAGE_LIMIT;
+
 
 public abstract class AbstractArrayStorageTest extends AbstractStorage {
     protected final Storage storage;

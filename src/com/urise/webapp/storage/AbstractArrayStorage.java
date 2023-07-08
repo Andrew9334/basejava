@@ -1,4 +1,4 @@
-package com.urise.webapp.model.storage;
+package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.*;
 
 public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
-    protected static final int STORAGE_LIMIT = 10000;
+    public static final int STORAGE_LIMIT = 10000;
     protected final Resume[] STORAGE = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 

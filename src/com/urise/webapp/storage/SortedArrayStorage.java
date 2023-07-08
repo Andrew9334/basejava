@@ -1,4 +1,4 @@
-package com.urise.webapp.model.storage;
+package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
@@ -6,19 +6,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Array based storage for Resumes
- */
-public class ArrayStorage extends AbstractArrayStorage {
+public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected void saveResume(Resume resume, int searchKey) {
-        STORAGE[size] = resume;
+        int indexSave = - searchKey - 1;
+        System.arraycopy(STORAGE, indexSave, STORAGE, indexSave + 1, size - indexSave  );
+        STORAGE[indexSave] = resume;
     }
 
     @Override
     protected void deleteResume(int searchKey) {
-        System.arraycopy(STORAGE, size - 1, STORAGE, (int) searchKey, 1);
+        System.arraycopy(STORAGE, searchKey + 1, STORAGE, searchKey, size - searchKey - 1);
     }
 
     @Override
@@ -28,13 +27,7 @@ public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected Integer getSearchKey(String uuid) {
-        for (int i = 0; i < size; i++) {
-            if (STORAGE[i].getUuid().equals(uuid)) {
-                return i;
-            }
-        }
-        return -1;
+        Resume searchKey = new Resume(uuid, "nothing");
+        return Arrays.binarySearch(STORAGE, 0, size, searchKey);
     }
 }
-
-

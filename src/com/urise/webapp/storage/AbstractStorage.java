@@ -1,4 +1,4 @@
-package com.urise.webapp.model.storage;
+package com.urise.webapp.storage;
 
 import com.urise.webapp.Storage;
 import com.urise.webapp.exception.ExistStorageException;

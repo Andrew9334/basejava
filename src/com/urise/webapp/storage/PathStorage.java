@@ -1,48 +1,44 @@
-package com.urise.webapp.model.storage;
+package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.storage.strategy.StreamSerializer;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 
-public class ObjectStreamPathStorage extends AbstractStorage<Path> {
+public class PathStorage extends AbstractStorage<Path> {
     private final Path path;
-    private final StrategyFiles strategyFiles;
+    private final StreamSerializer streamSerializer;
 
-    public ObjectStreamPathStorage(String directory, StrategyFiles st) {
+    public PathStorage(String directory, StreamSerializer st) {
         Objects.requireNonNull(directory, "Directory must be not null");
-        if (!Files.isDirectory(Path.of(directory))) {
-            throw new IllegalArgumentException();
+        this.path = Paths.get(directory);
+        this.streamSerializer = st;
+
+        if (!Files.isDirectory(path) || !Files.isWritable(path)) {
+            throw new IllegalArgumentException(directory + "is not a directory");
         }
-        this.strategyFiles = st;
-        path = Paths.get(directory);
     }
 
     @Override
     public void clear() {
         try {
-            List<String> list = Files.readAllLines(path);
-            for (String file : list) {
-                doDelete(Path.of(file));
-            }
+            Files.list(path).forEach(this::doDelete);
         } catch (IOException e) {
-            e.printStackTrace();
-//            throw new StorageException("File is not exist", null);
+            throw new StorageException("IO Error", null);
         }
     }
 
     @Override
     public int size() {
         try {
-            return (int) Files.size(path);
+            return Files.list(path).toList().size();
         } catch (IOException e) {
             throw new StorageException("File is not exist", null);
         }
@@ -62,16 +58,17 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
     protected void doSave(Resume resume, Path path) {
         try {
             Files.createFile(path);
-            strategyFiles.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
+//            streamSerializer.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
             throw new StorageException("File is not exist", null);
         }
+        doUpdate(resume, path);
     }
 
     @Override
-    protected void doUpdate(Resume resume, Path searchKey) {
+    protected void doUpdate(Resume resume, Path path) {
         try {
-            strategyFiles.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
+            streamSerializer.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
             throw new NotExistStorageException("File is not exist");
         }
@@ -89,7 +86,7 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume doGet(Path path) {
         try {
-            return strategyFiles.doRead(new BufferedInputStream(Files.newInputStream(path)));
+            return streamSerializer.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
             throw new NotExistStorageException("File is not exist");
         }
