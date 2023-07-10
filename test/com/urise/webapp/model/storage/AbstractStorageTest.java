@@ -31,6 +31,10 @@ public abstract class AbstractStorageTest {
         this.storage = storage;
     }
 
+    static {
+
+    }
+
     @Before
     public void setUp() throws Exception{
         storage.clear();

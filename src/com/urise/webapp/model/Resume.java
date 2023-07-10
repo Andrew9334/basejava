@@ -1,10 +1,7 @@
 package com.urise.webapp.model;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Initial resume class
@@ -15,8 +12,8 @@ public class Resume implements Comparable<Resume>, Serializable {
     private String uuid;
     private String fullName;
 
-    Map<ContactType, String> contactTypeMap = new HashMap<>();
-    Map<SectionType, AbstractSection> sectionTypeMap = new HashMap<>();
+    Map<ContactType, String> contactTypeMap = new EnumMap<ContactType, String>(ContactType.class);
+    Map<SectionType, AbstractSection> sectionTypeMap = new EnumMap<SectionType, AbstractSection>(SectionType.class);
 
     public Resume(String uuid, String fullName) {
         Objects.requireNonNull(uuid, "uuid most not be null");
@@ -43,6 +40,14 @@ public class Resume implements Comparable<Resume>, Serializable {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getContact(ContactType type) {
+        return contactTypeMap.get(type);
+    }
+
+    public AbstractSection getSection(SectionType type) {
+        return sectionTypeMap.get(type);
     }
 
     @Override

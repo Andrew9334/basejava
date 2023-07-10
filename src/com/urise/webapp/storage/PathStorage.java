@@ -5,12 +5,15 @@ import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.storage.strategy.StreamSerializer;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class PathStorage extends AbstractStorage<Path> {
     private final Path path;
@@ -51,7 +54,7 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected boolean isExist(Path path) {
-        return Files.isRegularFile(this.path);
+        return Files.isRegularFile(path);
     }
 
     @Override
@@ -60,7 +63,7 @@ public class PathStorage extends AbstractStorage<Path> {
             Files.createFile(path);
             streamSerializer.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
-            throw new StorageException("File is not exist", null);
+            throw new StorageException("File is not exist", resume.getUuid(), e);
         }
     }
 
@@ -87,12 +90,16 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             return streamSerializer.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
-            throw new NotExistStorageException("File is not exist");
+            throw new NotExistStorageException("File cannot read");
         }
     }
 
     @Override
     protected List<Resume> doCopyAll() {
-        return null;
+        try {
+            return Files.list(path).map(this::doGet).collect(Collectors.toList());
+        } catch (IOException e) {
+            throw new StorageException("File cannot read", null, e);
+        }
     }
 }
