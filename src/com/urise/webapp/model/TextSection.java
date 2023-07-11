@@ -1,12 +1,9 @@
 package com.urise.webapp.model;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-public class TextSection extends AbstractSection{
+public class TextSection extends Section {
     private static final long serialVersionUID = 1L;
-    private final List<String> text = new ArrayList<>();
     private final String content;
 
     public TextSection(String content) {
@@ -14,8 +11,8 @@ public class TextSection extends AbstractSection{
         this.content = content;
     }
 
-    public List<String> getText() {
-        return text;
+    public String getContent() {
+        return content;
     }
 
     @Override
@@ -23,18 +20,18 @@ public class TextSection extends AbstractSection{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TextSection that = (TextSection) o;
-        return Objects.equals(text, that.text);
+        return content.equals(that.content);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(text);
+        return content.hashCode();
     }
 
     @Override
     public String toString() {
         return "TextSection{" +
-                "text=" + text +
+                "content='" + content + '\'' +
                 '}';
     }
 }

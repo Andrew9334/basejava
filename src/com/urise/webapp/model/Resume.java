@@ -10,20 +10,20 @@ public class Resume implements Comparable<Resume>, Serializable {
     private static final long serialVersionUID = 1L;
     // Unique identifier
     private String uuid;
-    private String fullName;
+    private final String fullName;
 
-    Map<ContactType, String> contactTypeMap = new EnumMap<ContactType, String>(ContactType.class);
-    Map<SectionType, AbstractSection> sectionTypeMap = new EnumMap<SectionType, AbstractSection>(SectionType.class);
+    Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
+
+    public Resume(String fullName) {
+        this(UUID.randomUUID().toString(), fullName);
+    }
 
     public Resume(String uuid, String fullName) {
         Objects.requireNonNull(uuid, "uuid most not be null");
         Objects.requireNonNull(fullName, "fullname most be not null");
         this.uuid = uuid;
         this.fullName = fullName;
-    }
-
-    public Resume(String fullName) {
-        this(UUID.randomUUID().toString(), fullName);
     }
 
     public String getUuid() {
@@ -38,16 +38,20 @@ public class Resume implements Comparable<Resume>, Serializable {
         return fullName;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
     public String getContact(ContactType type) {
-        return contactTypeMap.get(type);
+        return contacts.get(type);
     }
 
-    public AbstractSection getSection(SectionType type) {
-        return sectionTypeMap.get(type);
+    public Section getSection(SectionType type) {
+        return sections.get(type);
+    }
+
+    public void addContact(ContactType type, String value) {
+        contacts.put(type, value);
+    }
+
+    public void addSection(SectionType type, Section section) {
+        sections.put(type, section);
     }
 
     @Override
@@ -57,12 +61,15 @@ public class Resume implements Comparable<Resume>, Serializable {
 
         Resume resume = (Resume) o;
 
-        return uuid.equals(resume.uuid);
+        if(!uuid.equals(resume.uuid)) return false;
+        return fullName.equals(resume.fullName);
     }
 
     @Override
     public int hashCode() {
-        return uuid.hashCode();
+        int result = uuid.hashCode();
+        result = 31 * result + fullName.hashCode();
+        return result;
     }
 
     @Override
@@ -72,6 +79,7 @@ public class Resume implements Comparable<Resume>, Serializable {
 
     @Override
     public int compareTo(Resume o) {
-        return uuid.compareTo(o.uuid);
+        int cmp = fullName.compareTo(o.fullName);
+        return cmp != 0 ? cmp : uuid.compareTo(o.uuid);
     }
 }
