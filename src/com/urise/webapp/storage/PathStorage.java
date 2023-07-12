@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
     private final Path path;
@@ -31,20 +32,12 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public void clear() {
-        try {
-            Files.list(path).forEach(this::doDelete);
-        } catch (IOException e) {
-            throw new StorageException("IO Error", null);
-        }
+        convertPathToList().forEach((this::doDelete));
     }
 
     @Override
     public int size() {
-        try {
-            return Files.list(path).toList().size();
-        } catch (IOException e) {
-            throw new StorageException("File is not exist", null);
-        }
+        return convertPathToList().toList().size();
     }
 
     @Override
@@ -61,10 +54,10 @@ public class PathStorage extends AbstractStorage<Path> {
     protected void doSave(Resume resume, Path path) {
         try {
             Files.createFile(path);
-            streamSerializer.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
             throw new StorageException("File is not exist", resume.getUuid(), e);
         }
+        doUpdate(resume, path);
     }
 
     @Override
@@ -96,10 +89,14 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> doCopyAll() {
+        return convertPathToList().map(this::doGet).collect(Collectors.toList());
+    }
+
+    private Stream<Path> convertPathToList() {
         try {
-            return Files.list(path).map(this::doGet).collect(Collectors.toList());
+            return Files.list(path);
         } catch (IOException e) {
-            throw new StorageException("File cannot read", null, e);
+            throw new StorageException("Directory is not exist", null, e);
         }
     }
 }
