@@ -4,16 +4,23 @@ import com.urise.webapp.model.*;
 
 import java.time.Month;
 
-public class ResumeTestData {
+public class ResumeTestData extends Resume {
     private static Resume RESUME_1;
     private static Resume RESUME_2;
     private static Resume RESUME_3;
     private static Resume RESUME_4;
 
-    private static final String UUID_1 = RESUME_1.getUuid();
-    private static final String UUID_2 = RESUME_2.getUuid();
-    private static final String UUID_3 = RESUME_3.getUuid();
-    private static final String UUID_4 = RESUME_4.getUuid();
+    private static final String UUID_1 = "uuid1";
+    private static final String UUID_2 = "uuid2";
+    private static final String UUID_3 = "uuid3";
+    private static final String UUID_4 = "uuid4";
+
+    public ResumeTestData(Resume resume) {
+        RESUME_1 = resume;
+        RESUME_2 = resume;
+        RESUME_3 = resume;
+        RESUME_4 = resume;
+    }
 
     static {
         RESUME_1 = new Resume(UUID_1, "name1");
