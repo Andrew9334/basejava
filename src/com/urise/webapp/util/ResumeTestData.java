@@ -5,7 +5,7 @@ import com.urise.webapp.model.*;
 import java.time.Month;
 
 public class ResumeTestData {
-    public Resume resumeTest(String uuid, String fullName) {
+    public static Resume resumeTest(String uuid, String fullName) {
         Resume RESUME_1;
         Resume RESUME_2;
         Resume RESUME_3;
