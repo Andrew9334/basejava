@@ -7,18 +7,18 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class XmlStreamSerializer implements StreamSerializer {
-    private XmlParser xmlParser;
+    private final XmlParser xmlParser;
 
     public XmlStreamSerializer() {
-        xmlParser = new XmlParser(Resume.class, Organization.class, Link.class,
-                OrganizationSection.class, TextSection.class, ListSection.class,
-                OrganizationSection.class);
+        xmlParser = new XmlParser(
+                Resume.class, Organization.class, Link.class,
+                OrganizationSection.class, TextSection.class, ListSection.class, Organization.Position.class);
     }
 
     @Override
-    public void doWrite(Resume resume, OutputStream os) throws IOException {
+    public void doWrite(Resume r, OutputStream os) throws IOException {
         try (Writer w = new OutputStreamWriter(os, StandardCharsets.UTF_8)) {
-            xmlParser.marshall(resume, w);
+            xmlParser.marshall(r, w);
         }
     }
 
