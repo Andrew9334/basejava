@@ -47,12 +47,13 @@ public class DataStreamSerializer implements StreamSerializer {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            int size = dis.readInt();
-            for (int i = 0; i < size; i++) {
+            int sizeContacts = dis.readInt();
+            for (int i = 0; i < sizeContacts; i++) {
                 resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
             }
 
-            for (int i = 0; i < size; i++) {
+            int sizeSections = dis.readInt();
+            for (int i = 0; i < sizeSections; i++) {
                 SectionType sectionType = valueOf(dis.readUTF());
                 switch (sectionType) {
                     case PERSONAL, OBJECTIVE, ACHIEVEMENTS, QUALIFICATIONS ->
