@@ -19,8 +19,8 @@ public class ResumeTestData extends Resume {
         resume.addSection(SectionType.PERSONAL, new TextSection("Personal1"));
         resume.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
         resume.addSection(SectionType.ACHIEVEMENTS,
-                new TextSection("Achievements1"));
-        resume.addSection(SectionType.QUALIFICATIONS, new TextSection("Qualifications1"));
+                new ListSection("Achievements1"));
+        resume.addSection(SectionType.QUALIFICATIONS, new ListSection("Qualifications1"));
         resume.addSection(SectionType.EXPERIENCE, new OrganizationSection
                 (new Organization("Organization1", null,
                         new Organization.Position(2004, Month.SEPTEMBER, 2008, Month.MAY,
