@@ -123,6 +123,7 @@ public class DataStreamSerializer implements StreamSerializer {
     }
 
     private LocalDate readLocalDate(DataInputStream dis) throws IOException {
-        return LocalDate.of(dis.readInt(), Month.valueOf(dis.readUTF()));
+//        return LocalDate.of(dis.readInt(), Month.valueOf(dis.readUTF()));
+        return null;
     }
 }
