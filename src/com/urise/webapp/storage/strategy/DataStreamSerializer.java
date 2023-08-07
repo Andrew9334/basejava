@@ -5,9 +5,7 @@ import com.urise.webapp.model.*;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DataStreamSerializer implements StreamSerializer {
     @Override
@@ -16,14 +14,12 @@ public class DataStreamSerializer implements StreamSerializer {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
             Map<ContactType, String> contacts = resume.getContacts();
-            dos.writeInt(contacts.size());
-            for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
+            writeWithException(contacts.entrySet(), dos, entry -> {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
-            }
+            });
             Map<SectionType, Section> sections = resume.getSections();
-            dos.writeInt(sections.size());
-            for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
+            writeWithException(sections.entrySet(), dos, entry -> {
                 dos.writeUTF(entry.getKey().name());
                 switch (entry.getKey()) {
                     case PERSONAL, OBJECTIVE -> dos.writeUTF(((TextSection) entry.getValue()).getContent());
@@ -42,7 +38,7 @@ public class DataStreamSerializer implements StreamSerializer {
                     default -> {
                     }
                 }
-            }
+            });
         }
     }
 
@@ -83,14 +79,15 @@ public class DataStreamSerializer implements StreamSerializer {
         for (Organization org : organizations) {
             dos.writeUTF(org.getHomePage().getName());
             String checkUrl = org.getHomePage().getUrl() != null ? org.getHomePage().getUrl() : "";
+            dos.writeUTF(checkUrl);
             List<Organization.Position> positions = org.getPositions();
             dos.writeInt(positions.size());
             for (Organization.Position pos : positions) {
                 writeLocalDate(dos, pos.getStartDate());
                 writeLocalDate(dos, pos.getEndDate());
                 dos.writeUTF(pos.getTitle());
-                dos.writeUTF(pos.getDescription());
                 String checkDescription = pos.getDescription() != null ? pos.getDescription() : "";
+                dos.writeUTF(checkDescription);
             }
         }
     }
@@ -103,7 +100,7 @@ public class DataStreamSerializer implements StreamSerializer {
             String url = dis.readUTF();
             String checkUrl = url.isEmpty() ? url = null : url;
             List<Organization.Position> positions = new ArrayList<>();
-            organizations.add(new Organization(new Link(name, url), positions));
+            organizations.add(new Organization(new Link(name, checkUrl), positions));
             int sizePos = dis.readInt();
             for (int pos = 0; pos < sizePos; pos++) {
                 LocalDate startDate = readLocalDate(dis);
@@ -111,7 +108,7 @@ public class DataStreamSerializer implements StreamSerializer {
                 String title = dis.readUTF();
                 String description = dis.readUTF();
                 String checkDescription = description.isEmpty() ? description = null : description;
-                positions.add(new Organization.Position(startDate, endDate, title, description));
+                positions.add(new Organization.Position(startDate, endDate, title, checkDescription));
             }
         }
         resume.addSection(sectionType, new OrganizationSection(organizations));
@@ -123,7 +120,19 @@ public class DataStreamSerializer implements StreamSerializer {
     }
 
     private LocalDate readLocalDate(DataInputStream dis) throws IOException {
-//        return LocalDate.of(dis.readInt(), Month.valueOf(dis.readUTF()));
-        return null;
+        return LocalDate.of(dis.readInt(), Month.valueOf(dis.readUTF()), 1);
+    }
+
+    private <T> void writeWithException(Collection<T> collection, DataOutputStream dos, writeCollections<T>
+            writeCollections) throws IOException {
+        dos.writeInt(collection.size());
+        for (T element : collection) {
+            writeCollections.write(element);
+        }
+    }
+
+    @FunctionalInterface
+    private interface writeCollections<T> {
+        void write(T t) throws IOException;
     }
 }
