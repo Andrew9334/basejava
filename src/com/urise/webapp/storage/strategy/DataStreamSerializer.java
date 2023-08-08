@@ -25,10 +25,7 @@ public class DataStreamSerializer implements StreamSerializer {
                     case PERSONAL, OBJECTIVE -> dos.writeUTF(((TextSection) entry.getValue()).getContent());
                     case ACHIEVEMENTS, QUALIFICATIONS -> {
                         List<String> list = (((ListSection) entry.getValue()).getItems());
-                        dos.writeInt(list.size());
-                        for (String listAch : list) {
-                            dos.writeUTF(listAch);
-                        }
+                        writeWithException(list, dos, dos::writeUTF);
                     }
                     case EXPERIENCE, EDUCATION -> {
                         List<Organization> organizations = (((OrganizationSection) entry.getValue()).getOrganizations());
@@ -123,7 +120,7 @@ public class DataStreamSerializer implements StreamSerializer {
         return LocalDate.of(dis.readInt(), Month.valueOf(dis.readUTF()), 1);
     }
 
-    private <T> void writeWithException(Collection<T> collection, DataOutputStream dos, writeCollections<T>
+    private <T> void writeWithException(Collection<T> collection, DataOutputStream dos, WriteCollections<T>
             writeCollections) throws IOException {
         dos.writeInt(collection.size());
         for (T element : collection) {
@@ -132,7 +129,7 @@ public class DataStreamSerializer implements StreamSerializer {
     }
 
     @FunctionalInterface
-    private interface writeCollections<T> {
+    private interface WriteCollections<T> {
         void write(T t) throws IOException;
     }
 }
