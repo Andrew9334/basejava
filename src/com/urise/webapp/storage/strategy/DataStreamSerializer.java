@@ -57,10 +57,10 @@ public class DataStreamSerializer implements StreamSerializer {
                     case PERSONAL, OBJECTIVE -> resume.addSection(sectionType, new TextSection(dis.readUTF()));
                     case ACHIEVEMENTS, QUALIFICATIONS -> {
                         List<String> list = new ArrayList<>();
-                        int size = dis.readInt();
-                        for (int ach = 0; ach < size; ach++) {
+                        readWithException(dis, () -> {
                             list.add(dis.readUTF());
-                        }
+                            return list;
+                        });
                         resume.addSection(sectionType, new ListSection(list));
                     }
                     case EXPERIENCE, EDUCATION -> readOrganizations(dis, sectionType, resume);
@@ -98,15 +98,15 @@ public class DataStreamSerializer implements StreamSerializer {
             String checkUrl = url.isEmpty() ? url = null : url;
             List<Organization.Position> positions = new ArrayList<>();
             organizations.add(new Organization(new Link(name, checkUrl), positions));
-            int sizePos = dis.readInt();
-            for (int pos = 0; pos < sizePos; pos++) {
+            readWithException(dis, () -> {
                 LocalDate startDate = readLocalDate(dis);
                 LocalDate endDate = readLocalDate(dis);
                 String title = dis.readUTF();
                 String description = dis.readUTF();
                 String checkDescription = description.isEmpty() ? description = null : description;
                 positions.add(new Organization.Position(startDate, endDate, title, checkDescription));
-            }
+                return positions;
+            });
         }
         resume.addSection(sectionType, new OrganizationSection(organizations));
     }
@@ -128,8 +128,20 @@ public class DataStreamSerializer implements StreamSerializer {
         }
     }
 
+    private <T> void readWithException(DataInputStream dis, ReadCollections<T> readCollections) throws IOException {
+        int size = dis.readInt();
+        List<T> list = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            list.add(readCollections.read());
+        }
+    }
+
     @FunctionalInterface
     private interface WriteCollections<T> {
         void write(T t) throws IOException;
+    }
+
+    private interface ReadCollections<T> {
+        T read() throws IOException;
     }
 }
