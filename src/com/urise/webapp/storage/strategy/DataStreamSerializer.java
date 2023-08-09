@@ -45,13 +45,8 @@ public class DataStreamSerializer implements StreamSerializer {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            int sizeContacts = dis.readInt();
-            for (int i = 0; i < sizeContacts; i++) {
-                resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
-            }
-
-            int sizeSections = dis.readInt();
-            for (int i = 0; i < sizeSections; i++) {
+            readElement(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+            readElement(dis, () -> {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
                 switch (sectionType) {
                     case PERSONAL, OBJECTIVE -> resume.addSection(sectionType, new TextSection(dis.readUTF()));
@@ -67,7 +62,7 @@ public class DataStreamSerializer implements StreamSerializer {
                     default -> {
                     }
                 }
-            }
+            });
             return resume;
         }
     }
@@ -128,11 +123,19 @@ public class DataStreamSerializer implements StreamSerializer {
         }
     }
 
-    private <T> void readWithException(DataInputStream dis, ReadCollections<T> readCollections) throws IOException {
+    private <T> List<T> readWithException(DataInputStream dis, ReadCollections<T> readCollections) throws IOException {
         int size = dis.readInt();
         List<T> list = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             list.add(readCollections.read());
+        }
+        return list;
+    }
+
+    private void readElement(DataInputStream dis, ReadElement readElement) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            readElement.read();
         }
     }
 
@@ -143,5 +146,9 @@ public class DataStreamSerializer implements StreamSerializer {
 
     private interface ReadCollections<T> {
         T read() throws IOException;
+    }
+
+    private interface ReadElement {
+        void read() throws IOException;
     }
 }
