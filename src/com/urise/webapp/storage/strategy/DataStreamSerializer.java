@@ -123,13 +123,12 @@ public class DataStreamSerializer implements StreamSerializer {
         }
     }
 
-    private <T> List<T> readWithException(DataInputStream dis, ReadCollections<T> readCollections) throws IOException {
+    private <T> void readWithException(DataInputStream dis, ReadCollections<T> readCollections) throws IOException {
         int size = dis.readInt();
         List<T> list = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             list.add(readCollections.read());
         }
-        return list;
     }
 
     private void readElement(DataInputStream dis, ReadElement readElement) throws IOException {
