@@ -34,7 +34,7 @@ public class ListStorage extends AbstractStorage<Integer> {
 
     @Override
     protected void doDelete(Integer searchKey) {
-        STORAGE.remove(searchKey);
+        STORAGE.remove(searchKey.intValue());
     }
 
     @Override
