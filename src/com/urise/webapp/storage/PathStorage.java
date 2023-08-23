@@ -74,7 +74,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             Files.delete(path);
         } catch (IOException e) {
-            throw new StorageException("File is not exist", null);
+            throw new StorageException("File is not exist", (Exception) null);
         }
     }
 
