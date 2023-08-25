@@ -35,10 +35,10 @@ public abstract class AbstractStorageTest {
 
     static {
         final ResumeTestData resumeTestData = new ResumeTestData();
-        RESUME_1 = resumeTestData.fillResume("uuid1", "name1");
-        RESUME_2 = resumeTestData.fillResume("uuid2", "name2");
-        RESUME_3 = resumeTestData.fillResume("uuid3", "name3");
-        RESUME_4 = resumeTestData.fillResume("uuid4", "name4");
+        RESUME_1 = resumeTestData.fillResume("uuid1","name1");
+        RESUME_2 = resumeTestData.fillResume("uuid2","name2");
+        RESUME_3 = resumeTestData.fillResume("uuid3","name3");
+        RESUME_4 = resumeTestData.fillResume("uuid4","name4");
     }
 
     @Before
@@ -60,11 +60,12 @@ public abstract class AbstractStorageTest {
         storage.save(RESUME_4);
         assertSize(4);
         assertGet(RESUME_4);
+        System.out.println(storage.size());
     }
 
     @Test
     public void update() throws Exception {
-        Resume RESUME_1 = new Resume(UUID_1, "");
+        Resume RESUME_1 = new Resume(UUID_1, "name1");
         storage.update(RESUME_1);
         assertEquals(RESUME_1, storage.get(UUID_1));
     }
@@ -86,10 +87,10 @@ public abstract class AbstractStorageTest {
     @Test
     public void getAllSorted() throws Exception {
         List<Resume> list = storage.getAllSorted();
+        System.out.println(list);
         assertEquals(3, list.size());
         assertEquals(list, Arrays.asList(RESUME_1, RESUME_2, RESUME_3));
     }
-
     @Test
     public void size() {
         assertSize(3);

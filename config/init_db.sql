@@ -20,35 +20,3 @@ CREATE TABLE section (
 );
 CREATE UNIQUE INDEX section_idx
     ON section (resume_uuid, type);
-
-
-
--- -- auto-generated definition
--- create table resume
--- (
---     uuid      char(36) not null
---         constraint uuid
---             primary key,
---     full_name text     not null
--- );
---
--- alter table resume
---     owner to postgres;
---
--- -- auto-generated definition
--- create table contact
--- (
---     id          integer not null
---         constraint id
---             primary key,
---     type        text    not null,
---     value       text    not null,
---     resume_uuid char(36)
---         constraint contact_resume_uuid_fk
---             references resume
---             on delete cascade
--- );
---
--- alter table contact
---     owner to postgres;
---
