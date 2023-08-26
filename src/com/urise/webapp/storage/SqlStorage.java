@@ -46,8 +46,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public Resume get(String uuid) {
-        return
-                sqlHelper.execute(("SELECT * FROM resume WHERE uuid = ?"), ps -> {
+        return sqlHelper.execute(("SELECT * FROM resume WHERE uuid = ?"), ps -> {
                     ps.setString(1, uuid);
                     ResultSet resultSet = ps.executeQuery();
                     if (!resultSet.next()) {
