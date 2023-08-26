@@ -3,6 +3,7 @@ package com.urise.webapp.util;
 import com.urise.webapp.model.*;
 
 import java.time.Month;
+import java.util.UUID;
 
 public class ResumeTestData extends Resume {
     public Resume fillResume(String uuid, String fullName) {
