@@ -17,8 +17,7 @@ public record SqlHelper(ConnectionFactory connectionFactory) {
              PreparedStatement ps = conn.prepareStatement(value)) {
             return executor.execute(ps);
         } catch (SQLException e) {
-            SQLException sqlException = new SQLException();
-            if (sqlException.getSQLState().equals("42710")) {
+            if (e.getSQLState().equals("42710")) {
                 throw new ExistStorageException("Resume is exist");
             }
             throw new StorageException(e);
