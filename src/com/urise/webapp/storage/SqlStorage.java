@@ -1,16 +1,18 @@
 package com.urise.webapp.storage;
 
 import com.urise.webapp.Storage;
+import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.sql.SqlHelper;
 
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SqlStorage implements Storage {
-    SqlHelper sqlHelper;
+    private final SqlHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
         sqlHelper = new SqlHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
@@ -36,6 +38,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void save(Resume r) {
+//        try {
         sqlHelper.execute("INSERT INTO resume (uuid, full_name) VALUES (?,?)", ps -> {
             ps.setString(1, r.getUuid());
             ps.setString(2, r.getFullName());
@@ -47,13 +50,13 @@ public class SqlStorage implements Storage {
     @Override
     public Resume get(String uuid) {
         return sqlHelper.execute(("SELECT * FROM resume WHERE uuid = ?"), ps -> {
-                    ps.setString(1, uuid);
-                    ResultSet resultSet = ps.executeQuery();
-                    if (!resultSet.next()) {
-                        throw new NotExistStorageException(uuid);
-                    }
-                    return new Resume(uuid, resultSet.getString("full_name"));
-                });
+            ps.setString(1, uuid);
+            ResultSet resultSet = ps.executeQuery();
+            if (!resultSet.next()) {
+                throw new NotExistStorageException(uuid);
+            }
+            return new Resume(uuid, resultSet.getString("full_name"));
+        });
     }
 
     @Override
