@@ -9,14 +9,14 @@ public class ResumeTestData extends Resume {
     public Resume fillResume(String uuid, String fullName) {
         final Resume resume = new Resume(uuid, fullName);
 
-//        resume.addContact(ContactType.EMAIL, "mail1@icloud.com");
-//        resume.addContact(ContactType.SKYPE, "skype1");
-//        resume.addContact(ContactType.PHONENUMBER, "89887526321");
-//        resume.addContact(ContactType.HOMEPAGE, "http://homepage1.com");
-//        resume.addContact(ContactType.PROFILEGITHUB, "http://github.com/github1");
-//        resume.addContact(ContactType.PROFILELINKEDIN, "http://www.linkedin.com/in/linkedin1");
-//        resume.addContact
-//                (ContactType.PROFILESTACKOVERFLOW, "https://stackoverflow.com/users/654845/stackoverflow1");
+        resume.addContact(ContactType.EMAIL, "mail1@icloud.com");
+        resume.addContact(ContactType.SKYPE, "skype1");
+        resume.addContact(ContactType.PHONENUMBER, "89887526321");
+        resume.addContact(ContactType.HOMEPAGE, "http://homepage1.com");
+        resume.addContact(ContactType.PROFILEGITHUB, "http://github.com/github1");
+        resume.addContact(ContactType.PROFILELINKEDIN, "http://www.linkedin.com/in/linkedin1");
+        resume.addContact
+                (ContactType.PROFILESTACKOVERFLOW, "https://stackoverflow.com/users/654845/stackoverflow1");
 //        resume.addSection(SectionType.PERSONAL, new TextSection("Personal1"));
 //        resume.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
 //        resume.addSection(SectionType.ACHIEVEMENTS,
