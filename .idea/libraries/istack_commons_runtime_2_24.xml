@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="istack-commons-runtime-2.24">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../dependencys/istack-commons-runtime-2.24.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
