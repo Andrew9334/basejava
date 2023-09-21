@@ -1,0 +1,21 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="resumes:Web exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/resumes_Web_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="basejava/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="basejava" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="gson-2.10.1" />
+          <element id="library" level="project" name="istack-commons-runtime-2.24" />
+          <element id="library" level="project" name="javax.activation-api-1.2.0" />
+          <element id="library" level="project" name="jaxb-api-2.3.1" />
+          <element id="library" level="project" name="jaxb-impl-2.3.1" />
+          <element id="library" level="project" name="postgresql-42.2.1" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
