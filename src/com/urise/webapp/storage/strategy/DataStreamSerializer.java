@@ -45,18 +45,18 @@ public class DataStreamSerializer implements StreamSerializer {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            readElement(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+            readElement(dis, () -> resume.setContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
             readElement(dis, () -> {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
                 switch (sectionType) {
-                    case PERSONAL, OBJECTIVE -> resume.addSection(sectionType, new TextSection(dis.readUTF()));
+                    case PERSONAL, OBJECTIVE -> resume.setSection(sectionType, new TextSection(dis.readUTF()));
                     case ACHIEVEMENTS, QUALIFICATIONS -> {
                         List<String> list = new ArrayList<>();
                         readWithException(dis, () -> {
                             list.add(dis.readUTF());
                             return list;
                         });
-                        resume.addSection(sectionType, new ListSection(list));
+                        resume.setSection(sectionType, new ListSection(list));
                     }
                     case EXPERIENCE, EDUCATION -> readOrganizations(dis, sectionType, resume);
                     default -> {
@@ -103,7 +103,7 @@ public class DataStreamSerializer implements StreamSerializer {
                 return positions;
             });
         }
-        resume.addSection(sectionType, new OrganizationSection(organizations));
+        resume.setSection(sectionType, new OrganizationSection(organizations));
     }
 
     private void writeLocalDate(DataOutputStream dos, LocalDate localDate) throws IOException {
