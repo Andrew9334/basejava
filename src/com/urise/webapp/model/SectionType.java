@@ -3,8 +3,8 @@ package com.urise.webapp.model;
 public enum SectionType {
     OBJECTIVE("Позиция"),
     PERSONAL("Личные качества"),
-    ACHIEVEMENTS("Достижения"),
     QUALIFICATIONS("Квалификация"),
+    ACHIEVEMENTS("Достижения"),
     EXPERIENCE("Опыт работы"),
     EDUCATION("Образование");
 

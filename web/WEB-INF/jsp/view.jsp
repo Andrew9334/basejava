@@ -14,7 +14,7 @@
 <body>
 <jsp:include page="fragments/header.jsp"/>
 <section>
-    <h1>${resume.fullName}&nbsp;<a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png"></a></h1>
+    <h1>${resume.fullName}&nbsp;<a href="resume?uuid=${resume.uuid}&action=edit"><img src="image/pencil.png"></a></h1>
     <p>
         <c:forEach var="contactEntry" items="${resume.contacts}">
             <jsp:useBean id="contactEntry"
@@ -48,7 +48,7 @@
                         </td>
                     </tr>
                 </c:when>
-                <c:when test="${type=='QUALIFICATIONS' || type=='ACHIEVEMENT'}">
+                <c:when test="${type=='QUALIFICATIONS' || type=='ACHIEVEMENTS'}">
                     <tr>
                         <td colspan="2">
                             <ul>

@@ -24,8 +24,8 @@
             <tr>
                 <td><a href="resume?uuid=${resume.uuid}&action=view">${resume.fullName}</a></td>
                 <td><%=ContactType.EMAIL.toHtml(resume.getContact(ContactType.EMAIL))%></td>
-                <td><a href="resume?uuid=${resume.uuid}&action=delete"><img src="img/delete.png"></a></td>
-                <td><a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png"></a></td>
+                <td><a href="resume?uuid=${resume.uuid}&action=delete"><img src="image/delete.png"></a></td>
+                <td><a href="resume?uuid=${resume.uuid}&action=edit"><img src="image/pencil.png"></a></td>
             </tr>
         </c:forEach>
     </table>

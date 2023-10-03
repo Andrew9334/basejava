@@ -47,25 +47,25 @@ li {
 
 a[href^="skype:"] {
     padding-left: 20px !important;
-    background: url(../image/skype.png) no-repeat center left;
+    background: url(../WEB-INF/jsp/image/skype.png) no-repeat center left;
 }
 
 a[href^="mailto:"] {
     padding-left: 20px !important;
-    background: url(../image/email.png) no-repeat center left;
+    background: url(../WEB-INF/jsp/image/email.png) no-repeat center left;
 }
 
 a[href^="https://stackoverflow.com"] {
     padding-left: 20px !important;
-    background: url(../image/so.png) no-repeat center left;
+    background: url(../WEB-INF/jsp/image/so.png) no-repeat center left;
 }
 
 a[href^="https://www.linkedin.com"] {
     padding-left: 20px !important;
-    background: url(../image/lin.png) no-repeat center left;
+    background: url(../WEB-INF/jsp/image/lin.png) no-repeat center left;
 }
 
 a[href*="github."] {
     padding-left: 20px !important;
-    background: url(../image/gh.png) no-repeat center left;
+    background: url(../WEB-INF/jsp/image/gh.png) no-repeat center left;
 }

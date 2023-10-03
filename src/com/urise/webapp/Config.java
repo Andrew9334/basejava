@@ -6,8 +6,8 @@ import java.io.*;
 import java.util.Properties;
 
 public class Config {
-    //    protected static File PROPS = new File(getHomeDir(), "config\\resumes.properties");
-    protected static File PROPS = new File("full\\path\\to\\resumes.properties");
+    protected static File PROPS = new File(getHomeDir(), "config\\resumes.properties");
+    //protected static File PROPS = new File("C:\\Users\\user\\Desktop\\basejava\\config\\resumes.properties");
     private static final Config INSTANCE = new Config();
     private final File storageDir;
     private final Storage storage;
