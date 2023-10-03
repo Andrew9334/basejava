@@ -19,7 +19,7 @@
         <input type="hidden" name="uuid" value="${resume.uuid}">
         <h1>Имя:</h1>
         <dl>
-            <input type="text" name="fullName" size=55 value="${resume.fullName}">
+            <input required type="text" name="fullName" size=55 value="${resume.fullName}">
         </dl>
         <h2>Контакты:</h2>
         <c:forEach var="type" items="<%=ContactType.values()%>">
@@ -40,7 +40,7 @@
                 <c:when test="${type=='PERSONAL'}">
                     <textarea name='${type}' cols=75 rows=5><%=section%></textarea>
                 </c:when>
-                <c:when test="${type=='QUALIFICATIONS' || type=='ACHIEVEMENT'}">
+                <c:when test="${type=='QUALIFICATIONS' || type=='ACHIEVEMENTS'}">
                     <textarea name='${type}' cols=75
                               rows=5><%=String.join("\n", ((ListSection) section).getItems())%></textarea>
                 </c:when>
@@ -90,9 +90,10 @@
             </c:choose>
         </c:forEach>
         <button type="submit">Сохранить</button>
-        <button onclick="window.history.back()">Отменить</button>
+        <button type="reset" onclick="window.history.back()">Отменить</button>
     </form>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>
+

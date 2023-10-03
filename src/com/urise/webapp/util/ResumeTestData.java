@@ -1,10 +1,16 @@
 package com.urise.webapp.util;
 
+import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.*;
+
+import java.time.Month;
 
 public class ResumeTestData extends Resume {
     public Resume fillResume(String uuid, String fullName) {
         final Resume resume = new Resume(uuid, fullName);
+        if (fullName == null || fullName == "") {
+            throw new StorageException("Заполните поле - имя", uuid);
+        }
 
         resume.setContact(ContactType.EMAIL, "mail1@icloud.com");
         resume.setContact(ContactType.SKYPE, "skype1");
@@ -19,14 +25,14 @@ public class ResumeTestData extends Resume {
         resume.setSection(SectionType.ACHIEVEMENTS,
                 new ListSection("Achievements1"));
         resume.setSection(SectionType.QUALIFICATIONS, new ListSection("Qualifications1"));
-//        resume.addSection(SectionType.EXPERIENCE, new OrganizationSection
-//                (new Organization("Organization1", null,
-//                        new Organization.Position(2004, Month.SEPTEMBER, 2008, Month.MAY,
-//                                "Analyst", "IT Department"))));
-//        resume.addSection(SectionType.EDUCATION, new OrganizationSection(
-//                new Organization("University", null,
-//                        new Organization.Position(1999, Month.SEPTEMBER, 2005, Month.JUNE,
-//                                "student", "IT Faculty"))));
+        resume.setSection(SectionType.EXPERIENCE, new OrganizationSection
+                (new Organization("Organization1", null,
+                        new Organization.Position(2004, Month.SEPTEMBER, 2008, Month.MAY,
+                                "Analyst", "IT Department"))));
+        resume.setSection(SectionType.EDUCATION, new OrganizationSection(
+                new Organization("University", null,
+                        new Organization.Position(1999, Month.SEPTEMBER, 2005, Month.JUNE,
+                                "student", "IT Faculty"))));
         return resume;
     }
 }
