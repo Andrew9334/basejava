@@ -9,7 +9,7 @@ public class ResumeTestData extends Resume {
     public Resume fillResume(String uuid, String fullName) {
         final Resume resume = new Resume(uuid, fullName);
         if (fullName == null || fullName == "") {
-            throw new StorageException("Заполните поле - имя", uuid);
+            return null;
         }
 
         resume.setContact(ContactType.EMAIL, "mail1@icloud.com");
