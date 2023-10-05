@@ -1,8 +1,5 @@
-<%@ page import="com.urise.webapp.model.ContactType" %>
-<%@ page import="com.urise.webapp.model.ListSection" %>
-<%@ page import="com.urise.webapp.model.OrganizationSection" %>
-<%@ page import="com.urise.webapp.model.SectionType" %>
 <%@ page import="com.urise.webapp.util.DateUtil" %>
+<%@ page import="com.urise.webapp.model.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -35,10 +32,10 @@
             <h2><a>${type.title}</a></h2>
             <c:choose>
                 <c:when test="${type=='OBJECTIVE'}">
-                    <input type='text' name='${type}' size=75 value='<%=section%>'>
+                    <input type='text' name='${type}' size=75 value='<%=""%>'>
                 </c:when>
                 <c:when test="${type=='PERSONAL'}">
-                    <textarea name='${type}' cols=75 rows=5><%=section%></textarea>
+                    <textarea name='${type}' cols=75 rows=5 value='<%=""%>'></textarea>
                 </c:when>
                 <c:when test="${type=='QUALIFICATIONS' || type=='ACHIEVEMENTS'}">
                     <textarea name='${type}' cols=75
